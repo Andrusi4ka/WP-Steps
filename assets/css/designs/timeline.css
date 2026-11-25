@@ -1,0 +1,35 @@
+/*
+ * WP Steps — Timeline: a side text | the line with the step's marker | the card.
+ * Alternate: the cards from side to side. Below 600px (WP_Steps_Design_Timeline::stack_below()):
+ * the line on the left, the side text and the card beside it.
+ */
+.wpst--timeline{--rail:calc(var(--num) + 56px);--rail-s:calc(var(--num) + 16px);--mark:var(--num)}
+.wpst--timeline:not(.wpst--marker-number){--rail:64px;--rail-s:40px;--mark:26px}
+.wpst--timeline.wpst--marker-dot{--mark:16px}
+.wpst--timeline.wpst--marker-none{--mark:0px}
+.wpst--timeline.wpst--marker-icon{--rail:calc(var(--icon) + 32px);--rail-s:calc(var(--icon) + 8px);--mark:var(--icon)}
+.wpst--timeline .wpst__steps{display:flex;flex-direction:column;gap:var(--gap)}
+.wpst--timeline .wpst-step{display:grid;grid-template-columns:minmax(0,1fr) var(--rail) minmax(0,1.7fr);align-items:center}
+.wpst--timeline .wpst-step__side{grid-column:1;grid-row:1;min-width:0;padding-right:20px;text-align:right}
+.wpst--timeline .wpst-step__rail{position:relative;grid-column:2;grid-row:1;align-self:stretch;display:flex;align-items:center;justify-content:center}
+/* The line: through each step's rail, across the gap to the next. */
+.wpst--timeline .wpst-step__rail::before{content:"";position:absolute;top:0;bottom:calc(-1*var(--gap));left:50%;border-left:var(--lw) var(--ls) var(--line);transform:translateX(-50%)}
+.wpst--timeline .wpst-step:last-child .wpst-step__rail::before{bottom:0}
+/* From the marker to the card. */
+.wpst--timeline .wpst-step__rail::after{content:"";position:absolute;top:50%;left:50%;right:0;border-top:var(--lw) var(--ls) var(--line);transform:translateY(-50%)}
+.wpst--timeline .wpst-step__card{grid-column:3;grid-row:1;padding:22px 28px}
+
+.wpst--timeline.wpst--alternate .wpst-step{grid-template-columns:minmax(0,1fr) var(--rail) minmax(0,1fr)}
+.wpst--timeline.wpst--alternate .wpst-step:nth-child(even) .wpst-step__side{grid-column:3;padding:0 0 0 20px;text-align:left}
+.wpst--timeline.wpst--alternate .wpst-step:nth-child(even) .wpst-step__card{grid-column:1}
+.wpst--timeline.wpst--alternate .wpst-step:nth-child(even) .wpst-step__rail::after{left:0;right:50%}
+
+@container wpst (max-width:600px){
+    .wpst--timeline .wpst-step,.wpst--timeline.wpst--alternate .wpst-step{grid-template-columns:var(--rail-s) minmax(0,1fr);align-items:start}
+    .wpst--timeline .wpst-step__rail,.wpst--timeline.wpst--alternate .wpst-step:nth-child(even) .wpst-step__rail{grid-column:1;grid-row:1/span 2;align-items:flex-start}
+    .wpst--timeline .wpst-step__side,.wpst--timeline.wpst--alternate .wpst-step:nth-child(even) .wpst-step__side{grid-column:2;grid-row:1;padding:0 0 10px 14px;text-align:left}
+    .wpst--timeline .wpst-step__card,.wpst--timeline.wpst--alternate .wpst-step:nth-child(even) .wpst-step__card{grid-column:2;grid-row:2;margin-left:14px;padding:18px 20px}
+    .wpst--timeline .wpst-step--no-aside .wpst-step__side{display:none}
+    .wpst--timeline .wpst-step--no-aside .wpst-step__card,.wpst--timeline.wpst--alternate .wpst-step--no-aside:nth-child(even) .wpst-step__card{grid-row:1}
+    .wpst--timeline .wpst-step__rail::after,.wpst--timeline.wpst--alternate .wpst-step:nth-child(even) .wpst-step__rail::after{top:calc(var(--mark)/2);left:50%;right:-14px}
+}

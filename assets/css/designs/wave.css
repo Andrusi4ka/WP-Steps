@@ -1,0 +1,40 @@
+/*
+ * WP Steps — Wave. The steps side by side, each a column of three rows (shared through subgrid:
+ * text above | circle | text below) so the circles stand on one line. Each circle has a half
+ * ring (a round border cut in half by clip-path), below and above in turn; a ring's ends are
+ * at the height of its middle, so the rings and the lines between them make a wave.
+ * A column is the block's width (100cqw of .wpst) by the number of steps; the circle shrinks to fit
+ * a narrow one. (Not a size container itself: containment would end the subgrid.)
+ * Below 720px: the wave runs down the left side, the texts beside the circles; the rows are as
+ * tall as each other (1fr), so the line from a ring to the next is the row plus the gap less the ring.
+ */
+/* The half rings' thickness and their gap from the circle: Settings → Line and markers → Half rings, per screen (2026-11-24). */
+.wpst--wave{--arcw:var(--wpst-arc,14px);--ring:var(--wpst-rg,8px)}
+@media (max-width:1024px){.wpst--wave{--arcw:var(--wpst-arc-t,var(--wpst-arc,14px));--ring:var(--wpst-rg-t,var(--wpst-rg,8px))}}
+@media (max-width:767px){.wpst--wave{--arcw:var(--wpst-arc-m,var(--wpst-arc-t,var(--wpst-arc,14px)));--ring:var(--wpst-rg-m,var(--wpst-rg-t,var(--wpst-rg,8px)))}}
+.wpst--wave .wpst__steps{--col:calc(100cqw / var(--wpst-n,1))}
+.wpst--wave .wpst__steps{display:grid;grid-template-columns:repeat(var(--wpst-n),minmax(0,1fr));grid-template-rows:auto auto auto}
+.wpst--wave .wpst-step{grid-row:1/span 3;display:grid;grid-template-rows:subgrid;justify-items:center;text-align:center}
+.wpst--wave .wpst-step__orb{--ic:min(var(--icon),calc(var(--col) - 2*(var(--ring) + var(--arcw))));--d:calc(var(--ic) + 2*(var(--ring) + var(--arcw)));position:relative;grid-row:2;display:flex;align-items:center;justify-content:center;width:var(--d);height:var(--d)}
+.wpst--wave .wpst-step__icon{z-index:1;width:var(--ic);height:var(--ic)}
+.wpst--wave .wpst-step--icon-plain .wpst-step__icon{width:var(--ic);height:var(--ic);color:var(--wpst-c)}
+.wpst--wave .wpst-step--icon-plain .wpst-step__icon svg,.wpst--wave .wpst-step--icon-plain .wpst-step__icon img{width:calc(var(--isf,.44)*100%);height:calc(var(--isf,.44)*100%)}
+/* In Wave the icon is a circle by default (its half ring follows its corners); elsewhere square (frontend.css). */
+.wpst--wave .wpst-step__icon{border-radius:var(--irad,50%)}
+.wpst--wave .wpst-step__arc{position:absolute;inset:0;border:var(--arcw) solid var(--wpst-c);border-radius:var(--irad,50%);clip-path:inset(50% -1px -1px -1px)}
+.wpst--wave .wpst-step:nth-child(even) .wpst-step__arc{clip-path:inset(-1px -1px 50% -1px)}
+/* To the next ring: from this ring's right end to the next one's left end. */
+.wpst--wave .wpst-step__link{position:absolute;top:50%;left:100%;width:calc(var(--col) - var(--d));border-top:var(--lw) var(--ls) var(--line);transform:translateY(-50%)}
+.wpst--wave .wpst-step__body{grid-row:3;align-self:start;max-width:100%;padding:18px 10px 0}
+.wpst--wave .wpst-step:nth-child(even) .wpst-step__body{grid-row:1;align-self:end;padding:0 10px 18px}
+
+@container wpst (max-width:720px){
+    .wpst--wave .wpst__steps{grid-template-columns:minmax(0,1fr);grid-template-rows:none;grid-auto-rows:1fr;row-gap:var(--gap)}
+    .wpst--wave .wpst-step{--ic:var(--icon);--d:calc(var(--ic) + 2*(var(--ring) + var(--arcw)));grid-row:auto;grid-template-rows:none;grid-template-columns:auto minmax(0,1fr);column-gap:20px;align-items:center;justify-items:start;text-align:left}
+    .wpst--wave .wpst-step__orb{--ic:var(--icon);--d:calc(var(--ic) + 2*(var(--ring) + var(--arcw)));grid-row:1;grid-column:1}
+    .wpst--wave .wpst-step__body,.wpst--wave .wpst-step:nth-child(even) .wpst-step__body{grid-row:1;grid-column:2;align-self:center;padding:0}
+    .wpst--wave .wpst-step__arc{clip-path:inset(-1px 50% -1px -1px)}
+    .wpst--wave .wpst-step:nth-child(even) .wpst-step__arc{clip-path:inset(-1px -1px -1px 50%)}
+    .wpst--wave .wpst-step__link{display:none}
+    .wpst--wave .wpst-step:not(:last-child)::after{content:"";position:absolute;top:calc(50% + var(--d)/2);left:calc(var(--d)/2);height:calc(100% + var(--gap) - var(--d));border-left:var(--lw) var(--ls) var(--line);transform:translateX(-50%)}
+}

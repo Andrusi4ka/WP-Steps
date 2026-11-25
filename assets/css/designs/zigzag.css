@@ -1,0 +1,58 @@
+/*
+ * WP Steps — Zigzag. Each step a row of five columns: side | point | middle | point | side.
+ * Odd steps: the card over the first three, the marker in the fourth, the large number in the
+ * fifth; even steps the other way round. The rows are as tall as each other (1fr), so the curve
+ * from a marker to the next one is exactly its row plus the gap tall: down from the marker, across
+ * the middle of the gap, down to the next marker (two boxes' borders, their corners rounded by Line →
+ * Corner radius, 2026-11-24; it was two quarter ellipses, a flat S mostly hidden by the cards).
+ * Below 640px: the line down the left, the number above each card.
+ */
+.wpst--zigzag{--side:22%;--point:64px;--point-s:40px;--lr:var(--wpst-lr,24px)}
+/* Icon markers (2026-11-25): the points as wide as the set's icon. */
+.wpst--zigzag.wpst--marker-icon{--point:calc(var(--icon) + 16px);--point-s:calc(var(--icon) + 4px)}
+@media (max-width:1024px){.wpst--zigzag{--lr:var(--wpst-lr-t,var(--wpst-lr,24px))}}
+@media (max-width:767px){.wpst--zigzag{--lr:var(--wpst-lr-m,var(--wpst-lr-t,var(--wpst-lr,24px)))}}
+.wpst--zigzag .wpst__steps{display:grid;grid-auto-rows:1fr;row-gap:var(--gap)}
+.wpst--zigzag .wpst-step{display:grid;grid-template-columns:var(--side) var(--point) minmax(0,1fr) var(--point) var(--side);align-items:center}
+.wpst--zigzag .wpst-step__card{--tip:var(--wpst-c);grid-column:1/4;grid-row:1;padding:14px 14px 14px 36px}
+.wpst--zigzag .wpst-step__point{position:relative;z-index:2;grid-column:4;grid-row:1;display:flex;justify-content:center}
+.wpst--zigzag .wpst-step__big{grid-column:5;grid-row:1;min-width:0;padding-left:10px}
+.wpst--zigzag .wpst-step:nth-child(even) .wpst-step__card{grid-column:3/6;flex-direction:row-reverse;padding:14px 36px 14px 14px}
+.wpst--zigzag .wpst-step:nth-child(even) .wpst-step__point{grid-column:2}
+.wpst--zigzag .wpst-step:nth-child(even) .wpst-step__big{grid-column:1;padding:0 10px 0 0;text-align:right}
+.wpst--zigzag .wpst-step--icon-plain .wpst-step__card{padding-right:30px}
+.wpst--zigzag .wpst-step--icon-plain:nth-child(even) .wpst-step__card{padding-left:30px}
+
+/* The card points at its marker. */
+.wpst--zigzag .wpst-step__card::after{content:"";position:absolute;top:50%;left:100%;margin-top:-9px;border:9px solid transparent;border-left-color:var(--tip)}
+.wpst--zigzag .wpst-step:nth-child(even) .wpst-step__card::after{left:auto;right:100%;border-left-color:transparent;border-right-color:var(--tip)}
+
+/* The large "Step 01". */
+.wpst--zigzag .wpst-step__big .wpst-step__label{display:inline-flex;flex-direction:column;margin:0;line-height:.95;letter-spacing:0;text-transform:uppercase}
+.wpst--zigzag .wpst-step:nth-child(even) .wpst-step__big .wpst-step__label{align-items:flex-end}
+.wpst--zigzag .wpst-step__big .wpst-step__word{font-size:calc(var(--num)*.5);font-weight:600;color:var(--wpst-label-color,#7b8189)}
+.wpst--zigzag .wpst-step__big .wpst-step__num{font-size:var(--num);font-weight:600;color:var(--wpst-c)}
+
+/* The curve to the next marker. */
+.wpst--zigzag .wpst-step__curve{position:absolute;z-index:0;top:50%;left:calc(var(--side) + var(--point)/2 - var(--lw)/2);right:calc(var(--side) + var(--point)/2 - var(--lw)/2);height:calc(100% + var(--gap));pointer-events:none}
+.wpst--zigzag .wpst-step__curve i{position:absolute;display:block;border:0 var(--ls) var(--line)}
+.wpst--zigzag .wpst-step__curve i:first-child{top:0;left:50%;right:0;height:50%;border-right-width:var(--lw);border-bottom-width:var(--lw);border-bottom-right-radius:var(--lr)}
+.wpst--zigzag .wpst-step__curve i:last-child{top:50%;bottom:0;left:0;right:50%;margin-top:calc(var(--lw)*-1);border-left-width:var(--lw);border-top-width:var(--lw);border-top-left-radius:var(--lr)}
+.wpst--zigzag .wpst-step:nth-child(even) .wpst-step__curve i:first-child{left:0;right:50%;border-right-width:0;border-left-width:var(--lw);border-bottom-right-radius:0;border-bottom-left-radius:var(--lr)}
+.wpst--zigzag .wpst-step:nth-child(even) .wpst-step__curve i:last-child{left:50%;right:0;border-left-width:0;border-right-width:var(--lw);border-top-left-radius:0;border-top-right-radius:var(--lr)}
+
+@container wpst (max-width:640px){
+    .wpst--zigzag .wpst__steps{grid-auto-rows:auto}
+    .wpst--zigzag .wpst-step,.wpst--zigzag .wpst-step:nth-child(even){grid-template-columns:var(--point-s) minmax(0,1fr);grid-template-rows:auto auto;row-gap:6px}
+    .wpst--zigzag .wpst-step__card,.wpst--zigzag .wpst-step:nth-child(even) .wpst-step__card{grid-column:2;grid-row:2;flex-direction:row-reverse;margin-left:12px;padding:12px 24px 12px 12px}
+    .wpst--zigzag .wpst-step--icon-plain .wpst-step__card,.wpst--zigzag .wpst-step--icon-plain:nth-child(even) .wpst-step__card{padding-left:20px}
+    .wpst--zigzag .wpst-step__card::after,.wpst--zigzag .wpst-step:nth-child(even) .wpst-step__card::after{left:auto;right:100%;border-left-color:transparent;border-right-color:var(--tip)}
+    .wpst--zigzag .wpst-step__point,.wpst--zigzag .wpst-step:nth-child(even) .wpst-step__point{grid-column:1;grid-row:2}
+    .wpst--zigzag .wpst-step__big,.wpst--zigzag .wpst-step:nth-child(even) .wpst-step__big{grid-column:2;grid-row:1;padding:0 0 0 12px;text-align:left}
+    .wpst--zigzag .wpst-step__big .wpst-step__label,.wpst--zigzag .wpst-step:nth-child(even) .wpst-step__big .wpst-step__label{flex-direction:row;align-items:baseline;gap:.3em}
+    .wpst--zigzag .wpst-step__big .wpst-step__word{font-size:calc(var(--num)*.4)}
+    .wpst--zigzag .wpst-step__big .wpst-step__num{font-size:calc(var(--num)*.7)}
+    .wpst--zigzag .wpst-step__curve{display:none}
+    .wpst--zigzag .wpst-step::before{content:"";position:absolute;top:0;bottom:calc(-1*var(--gap));left:calc(var(--point-s)/2);border-left:var(--lw) var(--ls) var(--line);transform:translateX(-50%)}
+    .wpst--zigzag .wpst-step:last-child::before{bottom:0}
+}

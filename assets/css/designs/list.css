@@ -1,0 +1,11 @@
+/* WP Steps — List: cards one under another, a line (an arrow) between them, in the middle. */
+.wpst--list .wpst__steps{display:flex;flex-direction:column;gap:var(--gap)}
+.wpst--list .wpst-step__card{padding:16px 32px 16px 16px}
+.wpst--list .wpst-step--icon-plain .wpst-step__card{padding-left:28px}
+.wpst--list .wpst-step__link{position:absolute;top:100%;left:50%;height:var(--gap);border-left:var(--lw) var(--ls) var(--line);transform:translateX(-50%)}
+.wpst--list.wpst--line-none .wpst-step__link{display:none}
+.wpst--list.wpst--arrow .wpst-step__link::after{content:"";position:absolute;bottom:-1px;left:calc(var(--lw)/-2);width:0;height:0;border-style:solid;border-width:calc(var(--lw)*2 + 5px) calc(var(--lw)*1.5 + 4px) 0;border-color:var(--line) transparent transparent;transform:translateX(-50%)}
+@container wpst (max-width:480px){
+    .wpst--list .wpst-step__card{gap:14px;padding:12px 20px 12px 12px}
+    .wpst--list .wpst-step--icon-plain .wpst-step__card{padding-left:20px}
+}

@@ -1,0 +1,14 @@
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Build output
+*.zip
+
+# Development tools (npm install)
+node_modules/
+
+# Screenshots the browser tests write
+/tests/*.png

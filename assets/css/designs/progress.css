@@ -1,0 +1,37 @@
+/*
+ * WP Steps — Progress (2026-11-25): the steps side by side in equal columns, three rows shared
+ * through subgrid (icon | marker on the line | texts) so the markers stand on one line. The line
+ * runs from each marker's middle across the column gap to the next; without markers (None) it is a
+ * bar across every column. Centred (default) or from the left (wpst--palign-left).
+ * Below 640px (WP_Steps_Design_Progress::stack_below()): the line down the left, the texts beside.
+ */
+.wpst--progress{--mk:26px;--mx:50%;--cg:var(--gap)}
+.wpst--progress.wpst--marker-dot{--mk:16px}
+.wpst--progress.wpst--marker-number{--mk:var(--num)}
+.wpst--progress.wpst--marker-none{--mk:0px}
+.wpst--progress.wpst--marker-icon{--mk:var(--icon)}
+.wpst--progress.wpst--palign-left{--mx:calc(var(--mk)/2)}
+.wpst--progress .wpst__steps{display:grid;grid-template-columns:repeat(var(--wpst-n),minmax(0,1fr));grid-template-rows:auto auto auto;column-gap:var(--cg)}
+.wpst--progress .wpst-step{grid-row:1/span 3;display:grid;grid-template-rows:subgrid;justify-items:center;text-align:center;min-width:0}
+.wpst--progress.wpst--palign-left .wpst-step{justify-items:start;text-align:left}
+.wpst--progress .wpst-step__top{grid-row:1;display:flex;align-items:flex-end}
+.wpst--progress .wpst-step__top:not(:empty){margin-bottom:14px}
+.wpst--progress .wpst-step__rail{position:relative;grid-row:2;justify-self:stretch;display:flex;align-items:center;justify-content:center;min-height:max(var(--mk),var(--lw))}
+.wpst--progress.wpst--palign-left .wpst-step__rail{justify-content:flex-start}
+.wpst--progress .wpst-step__link{position:absolute;z-index:1;top:50%;left:var(--mx);width:calc(100% + var(--cg));border-top:var(--lw) var(--ls) var(--line);transform:translateY(-50%)}
+.wpst--progress.wpst--line-none .wpst-step__link{display:none}
+/* None: no markers, the line a bar across every column (the gap's part in the step's color too). */
+.wpst--progress.wpst--marker-none .wpst-step__link{left:0}
+.wpst--progress.wpst--marker-none .wpst-step:last-child .wpst-step__link{width:100%}
+.wpst--progress .wpst-step__body{grid-row:3;max-width:100%;padding-top:14px}
+
+@container wpst (max-width:640px){
+    .wpst--progress .wpst__steps{grid-template-columns:minmax(0,1fr);grid-template-rows:none;row-gap:var(--gap)}
+    .wpst--progress .wpst-step,.wpst--progress.wpst--palign-left .wpst-step{grid-row:auto;grid-template-rows:auto auto;grid-template-columns:max(var(--mk),var(--lw),16px) minmax(0,1fr);column-gap:16px;justify-items:start;text-align:left}
+    .wpst--progress .wpst-step__top{grid-column:2;grid-row:1}
+    .wpst--progress .wpst-step__top:not(:empty){margin-bottom:10px}
+    .wpst--progress .wpst-step__rail,.wpst--progress.wpst--palign-left .wpst-step__rail{grid-column:1;grid-row:1/span 2;align-self:stretch;justify-self:center;align-items:flex-start;justify-content:center}
+    .wpst--progress .wpst-step__link,.wpst--progress.wpst--marker-none .wpst-step__link{top:calc(var(--mk)/2);left:50%;width:0;height:calc(100% + var(--gap) - var(--mk)/2);border-top:0;border-left:var(--lw) var(--ls) var(--line);transform:translateX(-50%)}
+    .wpst--progress.wpst--marker-none .wpst-step:last-child .wpst-step__link{width:0;height:100%}
+    .wpst--progress .wpst-step__body{grid-column:2;grid-row:2;padding-top:0}
+}
