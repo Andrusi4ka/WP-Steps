@@ -15,8 +15,7 @@ class WP_Steps_Render {
 
     // The per-device sizes as CSS variables: key => variable name.
     const SIZE_VARS = array('gap' => 'gap', 'icon' => 'icon', 'title_size' => 'title', 'text_size' => 'text', 'number_size' => 'num', 'line_width' => 'lw');
-    const COLOR_VARS = array('color_from' => 'from', 'color_to' => 'to', 'title_color' => 'title-color', 'text_color' => 'text-color',
-        'label_color' => 'label-color', 'line_color' => 'line-color');
+    const COLOR_VARS = array('color_from' => 'from', 'color_to' => 'to', 'label_color' => 'label-color', 'line_color' => 'line-color');
 
     public static function init() {
         add_shortcode(self::SHORTCODE, array(__CLASS__, 'shortcode'));
@@ -91,33 +90,19 @@ class WP_Steps_Render {
         if (in_array('progress_align', $supports, true) && $s['progress_align'] === 'left') { $classes[] = 'wpst--palign-left'; }
         // The step number's alignment (2026-11-25): wpst--lalign-<left|center|right>; none: the design's.
         if (!empty($s['label_align']) && in_array('label_align', $supports, true)) { $classes[] = 'wpst--lalign-' . $s['label_align']; }
-        foreach (array('card_style' => 'card', 'icon_style' => 'icon', 'marker' => 'marker') as $key => $prefix) {
-            if (in_array($key, $supports, true)) { $classes[] = 'wpst--' . $prefix . '-' . $s[$key]; }
-        }
+        // Cards are always filled (a Border on top where set): much CSS reads wpst--card-filled.
+        if (in_array('card_style', $supports, true)) { $classes[] = 'wpst--card-filled'; }
+        if (in_array('marker', $supports, true)) { $classes[] = 'wpst--marker-' . $s['marker']; }
         foreach (array('shadow', 'arrow', 'alternate') as $key) {
             if ($s[$key] && in_array($key, $supports, true)) { $classes[] = 'wpst--' . $key; }
         }
 
         $vars = array('--wpst-n' => count($s['steps']));
-        foreach (self::SIZE_VARS as $key => $name) {
-            list($desktop, $tablet, $mobile) = WP_Steps_Settings::sizes($s, $key);
-            $vars['--wpst-' . $name] = $desktop . 'px';
-            $vars['--wpst-' . $name . '-t'] = $tablet . 'px';
-            $vars['--wpst-' . $name . '-m'] = $mobile . 'px';
-        }
-        // The half rings (Wave): thickness and gap per device (2026-11-24: the set's again).
-        // Zigzag's line corners (2026-11-24) the same way.
-        if (in_array('line_radius', $supports, true)) {
-            list($desktop, $tablet, $mobile) = WP_Steps_Settings::sizes($s, 'line_radius');
-            $vars['--wpst-lr'] = $desktop . 'px'; $vars['--wpst-lr-t'] = $tablet . 'px'; $vars['--wpst-lr-m'] = $mobile . 'px';
-        }
+        foreach (self::SIZE_VARS as $key => $name) { self::device_vars($vars, $name, WP_Steps_Settings::sizes($s, $key), 'px'); }
+        // Zigzag's line corners (2026-11-24); the half rings (Wave): thickness and gap per device (2026-11-24: the set's again).
+        if (in_array('line_radius', $supports, true)) { self::device_vars($vars, 'lr', WP_Steps_Settings::sizes($s, 'line_radius'), 'px'); }
         if (in_array('arc', $supports, true)) {
-            foreach (array('arc' => 'arc', 'ring_gap' => 'rg') as $key => $name) {
-                list($desktop, $tablet, $mobile) = WP_Steps_Settings::sizes($s, $key);
-                $vars['--wpst-' . $name] = $desktop . 'px';
-                $vars['--wpst-' . $name . '-t'] = $tablet . 'px';
-                $vars['--wpst-' . $name . '-m'] = $mobile . 'px';
-            }
+            foreach (array('arc' => 'arc', 'ring_gap' => 'rg') as $key => $name) { self::device_vars($vars, $name, WP_Steps_Settings::sizes($s, $key), 'px'); }
         }
         // The cards' shadow (2026-11-23): its parts as set.
         if (!empty($s['shadow'])) { $vars['--wpst-csh'] = WP_Steps_Settings::shadow_css($s['card_shadow_x'], $s['card_shadow_y'], $s['card_shadow_blur'], $s['card_shadow_spread'], $s['card_shadow_color']); }
@@ -129,9 +114,7 @@ class WP_Steps_Render {
             $sp = WP_Steps_Settings::spaces($s, $kind);
             if (!$sp) { continue; }
             $classes[] = 'wpst--' . $kind;
-            $vars['--wpst-' . $name] = $sp['desktop'];
-            $vars['--wpst-' . $name . '-t'] = $sp['tablet'];
-            $vars['--wpst-' . $name . '-m'] = $sp['mobile'];
+            self::device_vars($vars, $name, $sp);
         }
         if (!empty($s['css_class'])) { $classes[] = $s['css_class']; }
         $vars += $igap;
@@ -141,11 +124,12 @@ class WP_Steps_Render {
         $borders = in_array('card_border', $supports, true) ? WP_Steps_Settings::card_borders($s) : '';
         if ($borders) {
             $classes[] = 'wpst--border';
-            $vars['--wpst-cbw'] = $borders['desktop']; $vars['--wpst-cbw-t'] = $borders['tablet']; $vars['--wpst-cbw-m'] = $borders['mobile'];
+            self::device_vars($vars, 'cbw', $borders);
             $vars['--wpst-cbs'] = $s['card_border_style'];
             if ($s['card_border_color'] !== '') { $vars['--wpst-cbc'] = $s['card_border_color']; }
         }
-        // The cards' padding / margin (2026-11-25): per side and device where set, a class and a value (frontend.css).
+        // The cards' padding / margin (2026-11-25): per side and device where set, a class and a value (frontend.css). They are in the
+        // same box as the Border (the editor's boxModel('card'), shown where the design supports card_border), so the same check.
         if (in_array('card_border', $supports, true)) {
             foreach (array('padding' => 'p', 'margin' => 'm') as $kind => $k) {
                 foreach (WP_Steps_Settings::SIDES as $side) {
@@ -158,7 +142,7 @@ class WP_Steps_Render {
                 }
             }
         }
-        if ($radii) { $classes[] = 'wpst--radius'; $vars['--wpst-crr'] = $radii['desktop']; $vars['--wpst-crr-t'] = $radii['tablet']; $vars['--wpst-crr-m'] = $radii['mobile']; }
+        if ($radii) { $classes[] = 'wpst--radius'; self::device_vars($vars, 'crr', $radii); }
         $style = '';
         foreach ($vars as $name => $value) { $style .= $name . ':' . $value . ';'; }
 
@@ -174,8 +158,8 @@ class WP_Steps_Render {
             if (!empty($step['icon_color'])) { $ivars .= ';--wpst-ic:' . $step['icon_color']; }
             if ($ibg !== '') { $ivars .= ';--wpst-ibg:' . $ibg; }
             // Its circle's corners per device (2026-11-23).
-            $radii = WP_Steps_Settings::icon_radii($step, in_array('arc', $supports, true) ? '50%' : '0');
-            if ($radii) { $ivars .= ';--wpst-ir:' . $radii['desktop'] . ';--wpst-ir-t:' . $radii['tablet'] . ';--wpst-ir-m:' . $radii['mobile']; }
+            $iradii = WP_Steps_Settings::icon_radii($step, in_array('arc', $supports, true) ? '50%' : '0');
+            if ($iradii) { $ivars .= ';--wpst-ir:' . $iradii['desktop'] . ';--wpst-ir-t:' . $iradii['tablet'] . ';--wpst-ir-m:' . $iradii['mobile']; }
             // Its circle's shadow, as set in the step (2026-11-23).
             $ivars .= ';--wpst-ish:' . WP_Steps_Settings::icon_shadow_css($step);
             // Its Padding / Margin (2026-11-24): for each side and device that has one (its own or the larger screen's) a class
@@ -223,10 +207,23 @@ class WP_Steps_Render {
                 if (isset($step['icon_scale' . $dev]) && $step['icon_scale' . $dev] !== null) { $ivars .= ';--wpst-isc' . $sfx . ':' . ((int) $step['icon_scale' . $dev] / 100); }
             }
             $items .= '<li class="wpst-step wpst-step--icon-' . esc_attr($istyle) . (!empty($step['icon_color']) ? ' wpst-step--icon-tint' : '') . ($ibg !== '' ? ' wpst-step--icon-bg' : '')
-                // Its circle's shadow (2026-11-23): the step's, else the set's Shadow; only a filled circle casts one.
-                . ((($step['icon_shadow'] ?? null) === null ? !empty($s['shadow']) : $step['icon_shadow']) ? ' wpst-step--icon-shadow' : '') . ($p['aside'] === '' ? ' wpst-step--no-aside' : '') . $sclasses . '" style="' . esc_attr('--wpst-c:' . $colors[$i] . $ivars) . '">' . self::with_cover($design->step($p, $s), self::cover($step, $i)) . '</li>';
+                // Its circle's shadow (2026-11-23): the step's, else the cards' Shadow; only a filled circle casts one.
+                . (self::icon_shadow_on($s, $step, $supports) ? ' wpst-step--icon-shadow' : '') . ($p['aside'] === '' ? ' wpst-step--no-aside' : '') . $sclasses . '" style="' . esc_attr('--wpst-c:' . $colors[$i] . $ivars) . '">' . self::with_cover($design->step($p, $s), self::cover($step, $i)) . '</li>';
         }
         return '<div' . (!empty($s['css_id']) ? ' id="' . esc_attr($s['css_id']) . '"' : '') . ' class="' . esc_attr(implode(' ', $classes)) . '" style="' . esc_attr($style) . '"><ol class="wpst__steps">' . $items . '</ol></div>';
+    }
+
+    // A value on each screen as CSS variables: --wpst-<name>, -t, -m ($values: [desktop, tablet, phone] or keyed by device).
+    private static function device_vars(&$vars, $name, $values, $unit = '') {
+        $values = array_values($values);
+        foreach (array('', '-t', '-m') as $i => $sfx) { $vars['--wpst-' . $name . $sfx] = $values[$i] . $unit; }
+    }
+
+    // Does a step's circle cast a shadow? Its own switch, else the cards' Shadow — but only where the design has cards
+    // (2026-11-25: in Wave / Progress the cards' switch is not shown, so it no longer decides for the icons there).
+    public static function icon_shadow_on($s, $step, $supports) {
+        $own = $step['icon_shadow'] ?? null;
+        return $own === null ? (!empty($s['shadow']) && in_array('shadow', $supports, true)) : (bool) $own;
     }
 
     // The side title's / text's own size, weight and color per device (2026-11-24): --wpst-<at|ax><s|w|c>[-t|-m] where it has them
@@ -263,7 +260,7 @@ class WP_Steps_Render {
         $word = $s['label_word'] !== '' ? '<span class="wpst-step__word">' . esc_html($s['label_word']) . '</span>' : '';
         $label = $s['show_label'] ? '<span class="wpst-step__label">' . $word . ($word !== '' ? ' ' : '') . '<span class="wpst-step__num">' . esc_html($number) . '</span></span>' : '';
         // Its Title (2026-11-23: from the editor, inline): its own tag (else the set's), size per device, weight, color, alignment.
-        $tag = !empty($step['title_tag']) ? $step['title_tag'] : $s['title_tag'];
+        $tag = !empty($step['title_tag']) ? $step['title_tag'] : WP_Steps_Settings::TITLE_TAG;
         $own = '';
         foreach (array('' => 'title_size', '-t' => 'title_size_tablet', '-m' => 'title_size_mobile') as $sfx => $key) { if (isset($step[$key]) && $step[$key] !== null) { $own .= '--wpst-tts' . $sfx . ':' . (int) $step[$key] . 'px;'; } }
         if (!empty($step['title_weight'])) { $own .= 'font-weight:' . (int) $step['title_weight'] . ';'; }

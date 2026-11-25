@@ -1,10 +1,10 @@
 === WP Steps ===
-Contributors: andriiboiko
+Contributors: andrusi4ka
 Tags: steps, timeline, process, infographic, wpbakery
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.0
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,7 +28,12 @@ Insert the steps with the shortcode `[wp_steps id="123"]` or the WP Steps elemen
 
 No script on the page: the designs are CSS only, and each design's stylesheet loads only where it is used.
 
+Who may edit, add or delete the sets of steps and use the WPBakery element is set per role under WP Steps → Settings (Administrators always may).
+
 == Changelog ==
 
-= 0.1.0 =
-* First version: List, Timeline, Zigzag, Wave and Progress designs; the editor with a live-size preview on desktop, tablet and phone; WPBakery element.
+= 1.0.0 =
+* First release: List, Timeline, Zigzag, Wave and Progress designs; the editor with a live-size preview on desktop, tablet and phone; the shortcode and the WPBakery element.
+* WP Steps → Settings: what each role may do with the sets of steps (edit, add new, delete, the WPBakery element). Administrators always may do all of it.
+* Updates from GitHub under Plugins, like any other plugin, and a "What's new" window after each update.
+* Closing a step's window with changes not applied asks first.

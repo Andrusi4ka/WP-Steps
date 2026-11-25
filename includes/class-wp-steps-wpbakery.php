@@ -17,7 +17,7 @@ class WP_Steps_WPBakery {
     }
 
     public static function map() {
-        if (!current_user_can('edit_posts')) { return; }
+        if (!WP_Steps_Access::can('wpbakery')) { return; }
         if (function_exists('vc_add_shortcode_param')) {
             vc_add_shortcode_param(self::EDIT_PARAM, array(__CLASS__, 'edit_param'), WP_STEPS_URL . 'assets/js/wpbakery.js?ver=' . rawurlencode(wp_steps_asset('assets/js/wpbakery.js')));
         }
@@ -100,7 +100,7 @@ class WP_Steps_WPBakery {
 
     public static function ajax_list() {
         check_ajax_referer(self::LIST_ACTION);
-        if (!current_user_can('edit_posts')) { wp_send_json_error(null, 403); }
+        if (!WP_Steps_Access::can('wpbakery')) { wp_send_json_error(null, 403); }
         wp_send_json_success(self::items());
     }
 }

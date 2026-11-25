@@ -1,0 +1,12 @@
+/* Markers on a line: a ring, a dot, or a circle with the number. */
+.wpst .wpst-step__marker{position:relative;z-index:2;flex:0 0 auto;display:flex;align-items:center;justify-content:center;border-radius:50%}
+.wpst--marker-ring .wpst-step__marker{width:26px;height:26px;border:4px solid var(--wpst-c);background:var(--ring-bg)}
+.wpst--marker-ring .wpst-step__marker::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--wpst-c)}
+.wpst--marker-dot .wpst-step__marker{width:16px;height:16px;background:var(--wpst-c);box-shadow:0 0 0 4px var(--ring-bg)}
+.wpst--marker-number .wpst-step__marker{flex-direction:column;width:var(--num);height:var(--num);background:var(--wpst-c);color:#fff;font-weight:700;line-height:1;box-shadow:0 0 0 4px var(--ring-bg)}
+.wpst--marker-number .wpst-step__marker .wpst-step__word{margin-bottom:2px;font-size:calc(var(--num)*.17);letter-spacing:.06em;text-transform:uppercase}
+.wpst--marker-number .wpst-step__marker .wpst-step__num{font-size:calc(var(--num)*.36)}
+/* Icon (2026-11-25): the step's icon or image on the line, the page's colour behind it (the line stops at it); none: a dot. */
+.wpst--marker-icon .wpst-step__marker{border-radius:var(--irad,0);background:var(--ring-bg)}
+.wpst--marker-icon .wpst-step__marker--dot{width:16px;height:16px;border-radius:50%;background:var(--wpst-c);box-shadow:0 0 0 4px var(--ring-bg)}
+

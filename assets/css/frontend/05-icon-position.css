@@ -1,0 +1,49 @@
+/* The icon in its card (2026-11-24, Settings → Layout → Icon), per screen range (classes per device from WP_Steps_Render): its place
+   (left / right beside the texts, top / bottom above / below them; the card's padding smaller on its side), its alignment (beside:
+   top / middle / bottom; above / below: left / center / right, the texts too) and its gap to the texts. A device without them keeps
+   the design's own. */
+@media (min-width:1025px){
+.wpst.wpst--ipos-left-d .wpst-step .wpst-step__card.wpst-step__card{flex-direction:row;align-items:center;padding:16px 28px 16px 16px}
+.wpst.wpst--ipos-right-d .wpst-step .wpst-step__card.wpst-step__card{flex-direction:row;align-items:center;padding:16px 16px 16px 28px}
+.wpst.wpst--ipos-top-d .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-bottom-d .wpst-step .wpst-step__card.wpst-step__card{flex-direction:column;align-items:flex-start;padding:20px 24px}
+.wpst.wpst--ipos-left-d .wpst-step .wpst-step__card>.wpst-step__icon,.wpst.wpst--ipos-top-d .wpst-step .wpst-step__card>.wpst-step__icon{order:-1}
+.wpst.wpst--ipos-right-d .wpst-step .wpst-step__card>.wpst-step__icon,.wpst.wpst--ipos-bottom-d .wpst-step .wpst-step__card>.wpst-step__icon{order:1}
+.wpst.wpst--ipos-top-d .wpst-step .wpst-step__body,.wpst.wpst--ipos-bottom-d .wpst-step .wpst-step__body{width:100%}
+.wpst.wpst--ipos-left-d.wpst--ialign-start-d .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-right-d.wpst--ialign-start-d .wpst-step .wpst-step__card.wpst-step__card{align-items:flex-start}
+.wpst.wpst--ipos-top-d.wpst--ialign-start-d .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-bottom-d.wpst--ialign-start-d .wpst-step .wpst-step__card.wpst-step__card{align-items:flex-start;text-align:left}
+.wpst.wpst--ipos-left-d.wpst--ialign-center-d .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-right-d.wpst--ialign-center-d .wpst-step .wpst-step__card.wpst-step__card{align-items:center}
+.wpst.wpst--ipos-top-d.wpst--ialign-center-d .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-bottom-d.wpst--ialign-center-d .wpst-step .wpst-step__card.wpst-step__card{align-items:center;text-align:center}
+.wpst.wpst--ipos-left-d.wpst--ialign-end-d .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-right-d.wpst--ialign-end-d .wpst-step .wpst-step__card.wpst-step__card{align-items:flex-end}
+.wpst.wpst--ipos-top-d.wpst--ialign-end-d .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-bottom-d.wpst--ialign-end-d .wpst-step .wpst-step__card.wpst-step__card{align-items:flex-end;text-align:right}
+.wpst.wpst--ig-d .wpst-step .wpst-step__card.wpst-step__card{gap:var(--wpst-ig-d)}
+}
+@media (min-width:768px) and (max-width:1024px){
+.wpst.wpst--ipos-left-t .wpst-step .wpst-step__card.wpst-step__card{flex-direction:row;align-items:center;padding:16px 28px 16px 16px}
+.wpst.wpst--ipos-right-t .wpst-step .wpst-step__card.wpst-step__card{flex-direction:row;align-items:center;padding:16px 16px 16px 28px}
+.wpst.wpst--ipos-top-t .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-bottom-t .wpst-step .wpst-step__card.wpst-step__card{flex-direction:column;align-items:flex-start;padding:20px 24px}
+.wpst.wpst--ipos-left-t .wpst-step .wpst-step__card>.wpst-step__icon,.wpst.wpst--ipos-top-t .wpst-step .wpst-step__card>.wpst-step__icon{order:-1}
+.wpst.wpst--ipos-right-t .wpst-step .wpst-step__card>.wpst-step__icon,.wpst.wpst--ipos-bottom-t .wpst-step .wpst-step__card>.wpst-step__icon{order:1}
+.wpst.wpst--ipos-top-t .wpst-step .wpst-step__body,.wpst.wpst--ipos-bottom-t .wpst-step .wpst-step__body{width:100%}
+.wpst.wpst--ipos-left-t.wpst--ialign-start-t .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-right-t.wpst--ialign-start-t .wpst-step .wpst-step__card.wpst-step__card{align-items:flex-start}
+.wpst.wpst--ipos-top-t.wpst--ialign-start-t .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-bottom-t.wpst--ialign-start-t .wpst-step .wpst-step__card.wpst-step__card{align-items:flex-start;text-align:left}
+.wpst.wpst--ipos-left-t.wpst--ialign-center-t .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-right-t.wpst--ialign-center-t .wpst-step .wpst-step__card.wpst-step__card{align-items:center}
+.wpst.wpst--ipos-top-t.wpst--ialign-center-t .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-bottom-t.wpst--ialign-center-t .wpst-step .wpst-step__card.wpst-step__card{align-items:center;text-align:center}
+.wpst.wpst--ipos-left-t.wpst--ialign-end-t .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-right-t.wpst--ialign-end-t .wpst-step .wpst-step__card.wpst-step__card{align-items:flex-end}
+.wpst.wpst--ipos-top-t.wpst--ialign-end-t .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-bottom-t.wpst--ialign-end-t .wpst-step .wpst-step__card.wpst-step__card{align-items:flex-end;text-align:right}
+.wpst.wpst--ig-t .wpst-step .wpst-step__card.wpst-step__card{gap:var(--wpst-ig-t)}
+}
+@media (max-width:767px){
+.wpst.wpst--ipos-left-m .wpst-step .wpst-step__card.wpst-step__card{flex-direction:row;align-items:center;padding:12px 20px 12px 12px}
+.wpst.wpst--ipos-right-m .wpst-step .wpst-step__card.wpst-step__card{flex-direction:row;align-items:center;padding:12px 12px 12px 20px}
+.wpst.wpst--ipos-top-m .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-bottom-m .wpst-step .wpst-step__card.wpst-step__card{flex-direction:column;align-items:flex-start;padding:16px 20px}
+.wpst.wpst--ipos-left-m .wpst-step .wpst-step__card>.wpst-step__icon,.wpst.wpst--ipos-top-m .wpst-step .wpst-step__card>.wpst-step__icon{order:-1}
+.wpst.wpst--ipos-right-m .wpst-step .wpst-step__card>.wpst-step__icon,.wpst.wpst--ipos-bottom-m .wpst-step .wpst-step__card>.wpst-step__icon{order:1}
+.wpst.wpst--ipos-top-m .wpst-step .wpst-step__body,.wpst.wpst--ipos-bottom-m .wpst-step .wpst-step__body{width:100%}
+.wpst.wpst--ipos-left-m.wpst--ialign-start-m .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-right-m.wpst--ialign-start-m .wpst-step .wpst-step__card.wpst-step__card{align-items:flex-start}
+.wpst.wpst--ipos-top-m.wpst--ialign-start-m .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-bottom-m.wpst--ialign-start-m .wpst-step .wpst-step__card.wpst-step__card{align-items:flex-start;text-align:left}
+.wpst.wpst--ipos-left-m.wpst--ialign-center-m .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-right-m.wpst--ialign-center-m .wpst-step .wpst-step__card.wpst-step__card{align-items:center}
+.wpst.wpst--ipos-top-m.wpst--ialign-center-m .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-bottom-m.wpst--ialign-center-m .wpst-step .wpst-step__card.wpst-step__card{align-items:center;text-align:center}
+.wpst.wpst--ipos-left-m.wpst--ialign-end-m .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-right-m.wpst--ialign-end-m .wpst-step .wpst-step__card.wpst-step__card{align-items:flex-end}
+.wpst.wpst--ipos-top-m.wpst--ialign-end-m .wpst-step .wpst-step__card.wpst-step__card,.wpst.wpst--ipos-bottom-m.wpst--ialign-end-m .wpst-step .wpst-step__card.wpst-step__card{align-items:flex-end;text-align:right}
+.wpst.wpst--ig-m .wpst-step .wpst-step__card.wpst-step__card{gap:var(--wpst-ig-m)}
+}

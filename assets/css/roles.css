@@ -1,0 +1,32 @@
+/* WP Steps → Settings (class-wp-steps-access.php): the roles' table, as WP Swiper's roles.css. */
+.wpst-roles__table {
+	max-width: 960px;
+	margin-top: 12px;
+}
+
+.wpst-roles__table th,
+.wpst-roles__table td {
+	vertical-align: middle;
+}
+
+.wpst-roles__table thead th {
+	vertical-align: bottom;
+	font-weight: 600;
+}
+
+.wpst-roles__table .wpst-roles__action {
+	width: 17%;
+	text-align: center;
+}
+
+/* Administrators: always all, their boxes greyed. */
+.wpst-roles__always {
+	display: block;
+	color: #646970;
+	font-size: 12px;
+	font-weight: 400;
+}
+
+.wpst-roles__table input[type="checkbox"] {
+	margin: 0;
+}

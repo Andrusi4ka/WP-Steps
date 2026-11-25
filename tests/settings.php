@@ -19,8 +19,13 @@ $d = WP_Steps_Settings::defaults();
 check($d['design'] === 'list' && count($d['steps']) === 4, 'defaults: list design, four sample steps');
 check(WP_Steps_Settings::sanitize(array()) === WP_Steps_Settings::sanitize(WP_Steps_Settings::defaults()), 'empty input gives the defaults');
 check(WP_Steps_Settings::sanitize('nonsense')['design'] === 'list', 'non-array input');
-$s = WP_Steps_Settings::sanitize(array('design' => 'nope', 'card_style' => 'glass', 'marker' => 'number', 'line' => 'solid'));
-check($s['design'] === 'list' && $s['card_style'] === 'filled', 'unknown design and choice fall back to defaults');
+$s = WP_Steps_Settings::sanitize(array('design' => 'nope', 'number_format' => 'glass', 'marker' => 'number', 'line' => 'solid'));
+check($s['design'] === 'list' && $s['number_format'] === '01', 'unknown design and choice fall back to defaults');
+// Set-level keys without a field in the Settings (2026-11-25): not kept, not drawn.
+$gone = WP_Steps_Settings::sanitize(array('card_style' => 'outline', 'icon_style' => 'color', 'title_tag' => 'h2', 'title_color' => '#123456', 'text_color' => '#654321', 'layout' => 'wave', 'steps' => array(array('title' => 'T'))));
+check(!array_intersect(array_keys($gone), array('card_style', 'icon_style', 'title_tag', 'title_color', 'text_color', 'layout')) && $gone['design'] === 'list', 'removed set keys are dropped (an old layout is no longer read)');
+$goneHtml = WP_Steps_Render::markup($gone);
+check(strpos($goneHtml, '<h3 class="wpst-step__title">T</h3>') !== false && strpos($goneHtml, '--wpst-title-color') === false && strpos($goneHtml, 'wpst--icon-') === false && strpos($goneHtml, 'wpst--card-filled') !== false, 'a title without a Tag of its own is h3; no set title color; no block icon class; cards filled');
 check($s['marker'] === 'number' && $s['line'] === 'solid', 'known choices kept');
 foreach (WP_Steps_Designs::BUILT_IN as $id) {
     check(WP_Steps_Settings::sanitize(array('design' => $id))['design'] === $id, "design $id accepted");
@@ -40,8 +45,8 @@ check(WP_Steps_Settings::color('#ABC') === '#aabbcc', 'short hex expanded');
 check(WP_Steps_Settings::color('rgba(10, 20, 30, .5)') === 'rgba(10,20,30,0.5)', 'rgba normalized');
 check(WP_Steps_Settings::color('red') === '' && WP_Steps_Settings::color('rgba(300,0,0,1)') === '' && WP_Steps_Settings::color('#12345g') === '', 'invalid colors refused');
 check(WP_Steps_Settings::color('#fff;background:url(x)') === '', 'CSS injection refused');
-$s = WP_Steps_Settings::sanitize(array('color_from' => 'bad', 'title_color' => 'bad'));
-check($s['color_from'] === $d['color_from'] && $s['title_color'] === '', 'first color never empty; an automatic color may be');
+$s = WP_Steps_Settings::sanitize(array('color_from' => 'bad', 'line_color' => 'bad'));
+check($s['color_from'] === $d['color_from'] && $s['line_color'] === '', 'first color never empty; an automatic color may be');
 
 // Step colors: from → to, own color kept.
 $s = WP_Steps_Settings::sanitize(array('color_from' => '#000000', 'color_to' => '#ffffff', 'steps' => array(array('title' => 'a'), array('title' => 'b', 'color' => '#ff0000'), array('title' => 'c'))));
@@ -119,9 +124,9 @@ $t = WP_Steps_Settings::step(array('title' => '<p style="text-align: right;">One
 check($t['title'] === 'One <em>two</em><br>Three<br>x' && $t['title_align'] === 'right' && $t['title_tag'] === 'div' && $t['title_size'] === 30 && $t['title_size_mobile'] === WP_Steps_Settings::LIMITS['title_size'][0], 'Title: words and line breaks, its alignment from the editor, its tag, size (within limits)');
 $t2 = WP_Steps_Settings::step(array('title' => 'Plain & simple', 'title_align' => 'center', 'title_tag' => 'span'));
 check($t2['title'] === 'Plain &amp; simple' && $t2['title_align'] === 'center' && $t2['title_tag'] === '', 'a plain title escaped, its saved alignment kept; an unknown tag: Default');
-$tHtml = WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('title_tag' => 'h3', 'steps' => array($t))));
+$tHtml = WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('steps' => array($t))));
 check(strpos($tHtml, '<div class="wpst-step__title" style="--wpst-tts:30px;--wpst-tts-m:10px;font-weight:300;--title-c:#abcdef;text-align:right;">One <em>two</em><br>Three<br>x</div>') !== false, 'its markup: its own tag, size, weight, color and alignment');
-check(strpos(WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('title_tag' => 'h4', 'steps' => array(array('title' => 'T'))))), '<h4 class="wpst-step__title">T</h4>') !== false, 'no tag of its own: the set\'s');
+check(strpos(WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('steps' => array(array('title' => 'T', 'title_tag' => 'h4'))))), '<h4 class="wpst-step__title">T</h4>') !== false, 'a step\'s own tag');
 // The icon's own (2026-11-23): its style on the step (else the set's), its circle size per device and its color.
 $ic = WP_Steps_Settings::sanitize(array('icon_style' => 'white', 'steps' => array(array('title' => 'A', 'icon' => 'clock', 'icon_style' => 'plain', 'icon_size' => 70, 'icon_size_mobile' => 5, 'icon_color' => '#ff0000'), array('title' => 'B', 'icon' => 'clock', 'icon_style' => 'nope'))));
 check($ic['steps'][0]['icon_style'] === 'plain' && $ic['steps'][0]['icon_size_mobile'] === WP_Steps_Settings::LIMITS['icon'][0] && $ic['steps'][1]['icon_style'] === '', 'Icon: its style, size within limits; an unknown style: Default');
@@ -150,7 +155,6 @@ $sph = WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('steps' => arra
 check(strpos($sph, 'wpst-step--pl-d wpst-step--pl-t wpst-step--pl-m wpst-step--mb-t wpst-step--mb-m"') !== false && strpos($sph, ';--wpst-pl-d:30%;--wpst-pl-t:30%;--wpst-pl-m:30%;--wpst-mb-t:8px;--wpst-mb-m:8px') !== false && substr_count($sph, 'wpst-step--pl-d') === 1, 'step spacing: classes and values, the larger screen\'s below, none on Desktop where only the tablet has one');
 check(strpos(file_get_contents(WP_STEPS_DIR . 'assets/css/frontend.css'), '.wpst .wpst-step.wpst-step--mb-t .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--mb-t .wpst-step__body.wpst-step__body{margin-bottom:var(--wpst-mb-t)}') !== false, 'step spacing: its CSS');
 // Renamed layout → design (2026-11-24): a set saved with the old key keeps its design.
-check(WP_Steps_Settings::sanitize(array('layout' => 'wave'))['design'] === 'wave' && !array_key_exists('layout', WP_Steps_Settings::sanitize(array('layout' => 'wave'))), 'old key layout read as design');
 // Icon position (2026-11-24): a class where set and the design has cards; Auto none; not in Wave; anything else Auto.
 check(strpos(WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('design' => 'list', 'icon_position' => 'top'))), 'wpst--ipos-top') !== false && strpos(WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('design' => 'wave', 'icon_position' => 'top'))), 'wpst--ipos') === false && WP_Steps_Settings::sanitize(array('icon_position' => 'middle'))['icon_position'] === '' && strpos(WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('design' => 'list'))), 'wpst--ipos') === false, 'Icon position');
 // Icon alignment (2026-11-24): a class only with a position; anything else none.
@@ -165,13 +169,12 @@ check(strpos(WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('design' 
 $cr = WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('design' => 'list', 'card_radius_tl' => 16, 'card_radius_tr' => 300, 'card_radius_br' => 10, 'card_radius_br_unit' => '%', 'card_radius_bl_mobile' => 4)));
 check(strpos($cr, 'wpst--radius') !== false && strpos($cr, '--wpst-crr:16px 200px 10% 0;--wpst-crr-t:16px 200px 10% 0;--wpst-crr-m:16px 200px 10% 4px;') !== false, 'card radius: per corner and device, units, within limits');
 check(strpos(WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('design' => 'wave', 'card_radius_tl' => 9))), 'wpst--radius') === false && WP_Steps_Settings::sanitize(array('card_radius_tl' => ''))['card_radius_tl'] === 0, 'card radius: not in Wave; emptied 0');
-check(WP_Steps_Settings::sanitize(array('card_use_radius' => false, 'card_radius_tl' => 16))['card_radius_tl'] === 0 && WP_Steps_Settings::sanitize(array('card_use_border' => false, 'card_border_top' => 2))['card_border_top'] === 0, 'card box: a set saved with a switch off keeps none');
 // Zigzag's line corners (2026-11-24): per device, only in Zigzag; the CSS reads them.
 check(strpos(WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('design' => 'zigzag', 'line_radius_mobile' => 8))), '--wpst-lr:24px;--wpst-lr-t:24px;--wpst-lr-m:8px') !== false && strpos(WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('design' => 'list'))), '--wpst-lr') === false && strpos(file_get_contents(WP_STEPS_DIR . 'assets/css/designs/zigzag.css'), 'border-bottom-right-radius:var(--lr)') !== false, 'Zigzag line corners');
 // The cards' Border (2026-11-25): none by default; per side and device, its line and color; not in Wave. Their padding / margin; a step's own.
 $cb = WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('design' => 'list', 'card_border_top' => 2, 'card_border_right' => 2, 'card_border_bottom' => 2, 'card_border_left' => 99, 'card_border_top_mobile' => 0, 'card_border_style' => 'dotted', 'card_border_color' => '#ff0000')));
 check(strpos($cb, 'wpst--border') !== false && strpos($cb, '--wpst-cbw:2px 2px 2px 20px;--wpst-cbw-t:2px 2px 2px 20px;--wpst-cbw-m:0 2px 2px 20px;--wpst-cbs:dotted;--wpst-cbc:#ff0000') !== false, 'card border: widths per device within limits, line, color');
-check(strpos(WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('design' => 'list'))), 'wpst--border') === false && strpos(WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('design' => 'wave', 'card_border_top' => 3))), 'wpst--border') === false && WP_Steps_Settings::sanitize(array('card_style' => 'outline'))['card_style'] === 'filled', 'card border: none by default, not in Wave; cards always filled');
+check(strpos(WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('design' => 'list'))), 'wpst--border') === false && strpos(WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('design' => 'wave', 'card_border_top' => 3))), 'wpst--border') === false, 'card border: none by default, not in Wave');
 $cpm = WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('design' => 'list', 'card_padding_left' => 40, 'card_margin_top_tablet' => 5, 'card_margin_top_unit' => '%')));
 check(strpos($cpm, 'wpst--cpl-d') !== false && strpos($cpm, '--wpst-cpl-d:40px;') !== false && strpos($cpm, '--wpst-cmt-t:5%;--wpst-cmt-m:5%') !== false && strpos($cpm, 'wpst--cmt-d') === false, 'cards\' padding / margin: per side and device where set');
 $sbx = WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('design' => 'list', 'card_border_top' => 2, 'card_border_right' => 2, 'card_border_bottom' => 2, 'card_border_left' => 2, 'card_radius_tl' => 8, 'steps' => array(array('title' => 'A', 'border_left' => 6, 'border_color' => '#00ff00', 'radius_br_mobile' => 30, 'radius_br_unit' => '%'), array('title' => 'B')))));
@@ -258,8 +261,18 @@ $richHtml = WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('steps' =>
 check(strpos($richHtml, '<div class="wpst-step__text" style="--wpst-ts:18px;--wpst-ts-m:40px;font-weight:600;--text-c:#112233;"><h2 style="text-align: center">Head</h2>') !== false && strpos($richHtml, '<br') === false, 'its markup: as written, its own size, weight and color on the text');
 check(strpos(file_get_contents(WP_STEPS_DIR . 'assets/css/frontend.css'), 'font-size:var(--wpst-ts-m,var(--wpst-ts-t,var(--wpst-ts,var(--text))))') !== false, 'frontend.css: a phone takes the step\'s phone size, else its larger screen\'s, else Sizes\'');
 check(strpos($html, 'wpst-step--no-aside') === false, 'a step with a side text');
-$s = WP_Steps_Settings::sanitize(array('title_tag' => 'h2', 'steps' => array(array('title' => 'T'))));
+$s = WP_Steps_Settings::sanitize(array('steps' => array(array('title' => 'T', 'title_tag' => 'h2'))));
 check(strpos(WP_Steps_Render::markup($s), '<h2 class="wpst-step__title">T</h2>') !== false, 'title tag');
+// A circle's shadow (2026-11-25): none set follows the cards' Shadow only where the design has cards.
+$sh = array('shadow' => true, 'steps' => array(array('title' => 'A', 'icon' => 'clock', 'icon_shape' => 'filled')));
+check(strpos(WP_Steps_Render::markup(WP_Steps_Settings::sanitize($sh + array('design' => 'list'))), 'wpst-step--icon-shadow') !== false
+    && strpos(WP_Steps_Render::markup(WP_Steps_Settings::sanitize($sh + array('design' => 'wave'))), 'wpst-step--icon-shadow') === false
+    && strpos(WP_Steps_Render::markup(WP_Steps_Settings::sanitize(array('design' => 'wave', 'shadow' => false, 'steps' => array(array('title' => 'A', 'icon' => 'clock', 'icon_shape' => 'filled', 'icon_shadow' => true))))), 'wpst-step--icon-shadow') !== false,
+    'icon shadow: the cards\' switch where there are cards, none in Wave unless the step\'s own');
+// Helpers merged 2026-11-25.
+check(WP_Steps_Settings::flag(array('a' => 'false'), 'a') === false && WP_Steps_Settings::flag(array(), 'a') === true && WP_Steps_Settings::flag(array(), 'a', false) === false && WP_Steps_Settings::flag(array('a' => 1), 'a', false) === true, 'flag(): missing = default, "false" = off');
+check(WP_Steps_Settings::has_own(array('x_a' => 0), 'x_', array('a')) && !WP_Steps_Settings::has_own(array('x_a' => 0), 'x_', array('a'), true) && WP_Steps_Settings::has_own(array('x_a_mobile' => 2), 'x_', array('a'), true), 'has_own(): a value, or one above 0');
+check(WP_Steps_Settings::device_lists(array('p_a' => 2, 'p_a_tablet' => null, 'p_a_mobile' => 0, 'p_a_unit' => '%', 'p_b' => 0, 'p_b_tablet' => 5, 'p_b_mobile' => null), 'p_', array('a', 'b'), true) === array('desktop' => '2% 0', 'tablet' => '2% 5px', 'mobile' => '0 5px'), 'device_lists(): per device, units, 0 bare');
 $s = WP_Steps_Settings::sanitize(array('show_label' => false, 'steps' => array(array('title' => 'T'))));
 check(strpos(WP_Steps_Render::markup($s), 'wpst-step__label') === false, 'number hidden');
 $s = WP_Steps_Settings::sanitize(array('steps' => array(array('title' => 'T', 'icon' => 'flag'))));
@@ -287,6 +300,34 @@ $editor = WP_Steps_Designs::editor();
 check(end($editor)['supports'] === array('marker'), 'editor: only known optional settings listed');
 remove_all_filters('wp_steps_designs');
 WP_Steps_Designs::reset();
+
+// WP Steps → Settings (2026-11-25): what each role may do. Stand-ins for the site's roles: Administrator manages it.
+class WPST_Test_Role { public $caps; function __construct($caps) { $this->caps = $caps; } function has_cap($cap) { return !empty($this->caps[$cap]); } }
+$GLOBALS['wpst_roles'] = array('administrator' => array('name' => 'Administrator', 'capabilities' => array('manage_options' => true)), 'editor' => array('name' => 'Editor', 'capabilities' => array()), 'author' => array('name' => 'Author', 'capabilities' => array()));
+function wp_roles() { return (object) array('roles' => $GLOBALS['wpst_roles']); }
+function get_role($role) { return isset($GLOBALS['wpst_roles'][$role]) ? new WPST_Test_Role($GLOBALS['wpst_roles'][$role]['capabilities']) : null; }
+function get_option($name, $default = false) { return $GLOBALS['wpst_options'][$name] ?? $default; }
+require_once WP_STEPS_DIR . 'includes/class-wp-steps-access.php';
+$r = WP_Steps_Access::sanitize(array('administrator' => array('edit' => 1), 'editor' => array('edit' => '1', 'delete' => 1, 'bogus' => 1), 'author' => array('create' => 1, 'wpbakery' => 1), 'ghost' => array('edit' => 1)));
+check($r === array('editor' => array('edit' => true, 'delete' => true)), 'roles: Administrators and unknown roles never stored, unknown actions dropped, the others only with Edit steps');
+$GLOBALS['wpst_options'][WP_Steps_Access::OPTION] = $r;
+WP_Steps_Access::forget();
+$caps = WP_Steps_Access::grant(array(), array(), array(), (object) array('roles' => array('editor')));
+check(!empty($caps[WP_Steps_Access::EDIT]) && !empty($caps[WP_Steps_Access::DELETE]) && empty($caps[WP_Steps_Access::CREATE]) && empty($caps[WP_Steps_Access::WPBAKERY]), 'roles: an editor gets just what was ticked');
+$caps = WP_Steps_Access::grant(array('manage_options' => true), array(), array(), (object) array('roles' => array('administrator')));
+check(count(array_filter(array_intersect_key($caps, array_flip(array(WP_Steps_Access::EDIT, WP_Steps_Access::CREATE, WP_Steps_Access::DELETE, WP_Steps_Access::WPBAKERY))))) === 4, 'roles: those who manage the site get all');
+check(WP_Steps_Access::grant(array(), array(), array(), (object) array('roles' => array('author'))) === array(), 'roles: nothing ticked, nothing given');
+
+// What's new (2026-11-25): the readme's Changelog, the versions since the one seen.
+require_once WP_STEPS_DIR . 'includes/class-wp-steps-whats-new.php';
+$log = WP_Steps_Whats_New::parse_changelog("== Description ==\nx\n\n== Changelog ==\n\n= 1.2.0 =\n* Three\n  wrapped\n\n= 1.1.0 =\n* Two\n\n= 1.0.0 =\n* One\n");
+check($log === array('1.2.0' => array('Three wrapped'), '1.1.0' => array('Two'), '1.0.0' => array('One')), 'changelog read, a wrapped item joined');
+check(array_keys(WP_Steps_Whats_New::between($log, '1.0.0', '1.2.0')) === array('1.2.0', '1.1.0') && array_keys(WP_Steps_Whats_New::between($log, '', '1.2.0')) === array('1.2.0'), 'what\'s new: the versions after the one seen, newest first; unknown: the current one');
+$own = WP_Steps_Whats_New::parse_changelog(file_get_contents(WP_STEPS_DIR . 'readme.txt'));
+preg_match("/define\\('WP_STEPS_VERSION', '([^']+)'/", file_get_contents(WP_STEPS_DIR . 'wp-steps.php'), $ver);
+preg_match('/^Stable tag:\s*(\S+)/m', file_get_contents(WP_STEPS_DIR . 'readme.txt'), $stable);
+preg_match('/^\s*\*\s*Version:\s*(\S+)/m', file_get_contents(WP_STEPS_DIR . 'wp-steps.php'), $header);
+check(!empty($own[$ver[1]]) && $stable[1] === $ver[1] && $header[1] === $ver[1], 'the version is the same in the header, WP_STEPS_VERSION and Stable tag, and has its Changelog entry');
 
 echo "$passed passed, $failed failed\n";
 exit($failed ? 1 : 0);

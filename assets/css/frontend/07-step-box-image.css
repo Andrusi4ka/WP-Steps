@@ -1,0 +1,14 @@
+/* A step's own Border and Radius (2026-11-25, its Style tab): resolved with the cards' per screen (WP_Steps_Render). */
+.wpst .wpst-step.wpst-step--bw .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--bw .wpst-step__body.wpst-step__body{border-style:var(--wpst-sbs,var(--wpst-cbs,solid));border-color:var(--wpst-sbc,var(--wpst-cbc,var(--wpst-c)));border-width:var(--wpst-sbw)}
+.wpst .wpst-step.wpst-step--br .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--br .wpst-step__body.wpst-step__body{border-radius:var(--wpst-sbr)}
+@media (max-width:1024px){.wpst .wpst-step.wpst-step--bw .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--bw .wpst-step__body.wpst-step__body{border-width:var(--wpst-sbw-t)}.wpst .wpst-step.wpst-step--br .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--br .wpst-step__body.wpst-step__body{border-radius:var(--wpst-sbr-t)}}
+@media (max-width:767px){.wpst .wpst-step.wpst-step--bw .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--bw .wpst-step__body.wpst-step__body{border-width:var(--wpst-sbw-m)}.wpst .wpst-step.wpst-step--br .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--br .wpst-step__body.wpst-step__body{border-radius:var(--wpst-sbr-m)}}
+/* A step's image in a box of its own (2026-11-25, its Icon tab → Size: Aspect ratio / Custom): Size wide, as tall as its ratio or
+   height per screen (else 16/9, or Size), the image filling it (Cover by default) at its position; no inner space. */
+.wpst .wpst-step{--iar:var(--wpst-iar,16/9);--ih:var(--wpst-ih,var(--icon))}
+@media (max-width:1024px){.wpst .wpst-step{--iar:var(--wpst-iar-t,var(--wpst-iar,16/9));--ih:var(--wpst-ih-t,var(--wpst-ih,var(--icon)))}}
+@media (max-width:767px){.wpst .wpst-step{--iar:var(--wpst-iar-m,var(--wpst-iar-t,var(--wpst-iar,16/9)));--ih:var(--wpst-ih-m,var(--wpst-ih-t,var(--wpst-ih,var(--icon))))}}
+.wpst .wpst-step.wpst-step--img-box .wpst-step__icon.wpst-step__icon{width:var(--icon);overflow:hidden}
+.wpst .wpst-step.wpst-step--img-ratio .wpst-step__icon.wpst-step__icon{height:auto;aspect-ratio:var(--iar)}
+.wpst .wpst-step.wpst-step--img-custom .wpst-step__icon.wpst-step__icon{height:var(--ih)}
+.wpst .wpst-step.wpst-step--img-box .wpst-step__icon.wpst-step__icon img{width:100%;height:100%;object-fit:var(--wpst-ifit,cover);object-position:var(--wpst-ipos,center)}

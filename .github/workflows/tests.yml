@@ -1,0 +1,43 @@
+# Checks on every push to main and pull request, and before a release (release.yml calls this workflow and waits for it):
+# PHP and JS syntax, the built files equal to their parts, and tests/settings.php (settings, sanitising and rendering,
+# without WordPress). The browser tests (tests/browser.cjs, tests/editor.cjs) run locally. As WP Banner's.
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # The oldest PHP the plugin supports ("Requires PHP") and a current one.
+        php: ['7.4', '8.3']
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: PHP syntax
+        run: find . -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l > /dev/null
+
+      # admin.js, admin.css and frontend.css are joined from their parts (tools/build.cjs): they must be up to date.
+      - name: Built files
+        run: node tools/build.cjs --check
+
+      - name: JS syntax
+        run: for f in assets/js/*.js; do node --check "$f"; done
+
+      - name: Settings and rendering
+        run: php tests/settings.php

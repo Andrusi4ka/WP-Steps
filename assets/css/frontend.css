@@ -1,8 +1,11 @@
 /*
+ * Built file: assets/css/frontend.css is the parts in assets/css/frontend/ joined in order (tools/build.cjs,
+ * npm run build): edit the parts, never frontend.css.
+ *
  * WP Steps: what every design shares. Each design's own look is in designs/{id}.css.
  *
  * Variables set on .wpst by WP_Steps_Render::markup(): sizes per device (--wpst-gap, -t, -m …),
- * colors (--wpst-from, --wpst-to, --wpst-title-color …; a color left empty is not set and the
+ * colors (--wpst-from, --wpst-to, --wpst-line-color …; a color left empty is not set and the
  * fallbacks here apply), --wpst-n (how many steps), --wpst-lw (line width, -t / -m per screen).
  * On each step: --wpst-c, its color.
  *
@@ -24,7 +27,7 @@
 
 /* The list: no bullets or numbers of the theme's. */
 .wpst .wpst__steps{list-style:none;margin:0;padding:0}
-.wpst .wpst-step{position:relative;margin:0;padding:0;list-style:none;--line:var(--wpst-line-color,var(--wpst-c));--title-c:var(--wpst-title-color,#1f2937);--text-c:var(--wpst-text-color,#4b5563);--label-c:var(--wpst-label-color,var(--wpst-c))}
+.wpst .wpst-step{position:relative;margin:0;padding:0;list-style:none;--line:var(--wpst-line-color,var(--wpst-c));--title-c:#1f2937;--text-c:#4b5563;--label-c:var(--wpst-label-color,var(--wpst-c))}
 .wpst .wpst-step::marker{content:none}
 
 /* Texts. */
@@ -66,14 +69,14 @@
 /* A side text (Timeline). */
 /* The side text (Timeline): its title in any tag (2026-11-24), size, weight and color of its own per screen, else the usual. */
 .wpst .wpst-step__aside-title{margin:0 0 .3em;padding:0;line-height:1.25;letter-spacing:normal;text-transform:none;font-size:var(--wpst-ats,calc(var(--title)*.95));font-weight:var(--wpst-atw,600);color:var(--wpst-atc,var(--wpst-c))}
-.wpst .wpst-step__aside-text{margin:0;line-height:1.55;font-size:var(--wpst-axs,calc(var(--text)*.92));font-weight:var(--wpst-axw,400);color:var(--wpst-axc,var(--wpst-text-color,#6b7280))}
-@media (max-width:1024px){.wpst .wpst-step__aside-title{font-size:var(--wpst-ats-t,var(--wpst-ats,calc(var(--title)*.95)));font-weight:var(--wpst-atw-t,var(--wpst-atw,600));color:var(--wpst-atc-t,var(--wpst-atc,var(--wpst-c)))}.wpst .wpst-step__aside-text{font-size:var(--wpst-axs-t,var(--wpst-axs,calc(var(--text)*.92)));font-weight:var(--wpst-axw-t,var(--wpst-axw,400));color:var(--wpst-axc-t,var(--wpst-axc,var(--wpst-text-color,#6b7280)))}}
-@media (max-width:767px){.wpst .wpst-step__aside-title{font-size:var(--wpst-ats-m,var(--wpst-ats-t,var(--wpst-ats,calc(var(--title)*.95))));font-weight:var(--wpst-atw-m,var(--wpst-atw-t,var(--wpst-atw,600)));color:var(--wpst-atc-m,var(--wpst-atc-t,var(--wpst-atc,var(--wpst-c))))}.wpst .wpst-step__aside-text{font-size:var(--wpst-axs-m,var(--wpst-axs-t,var(--wpst-axs,calc(var(--text)*.92))));font-weight:var(--wpst-axw-m,var(--wpst-axw-t,var(--wpst-axw,400)));color:var(--wpst-axc-m,var(--wpst-axc-t,var(--wpst-axc,var(--wpst-text-color,#6b7280))))}}
+.wpst .wpst-step__aside-text{margin:0;line-height:1.55;font-size:var(--wpst-axs,calc(var(--text)*.92));font-weight:var(--wpst-axw,400);color:var(--wpst-axc,#6b7280)}
+@media (max-width:1024px){.wpst .wpst-step__aside-title{font-size:var(--wpst-ats-t,var(--wpst-ats,calc(var(--title)*.95)));font-weight:var(--wpst-atw-t,var(--wpst-atw,600));color:var(--wpst-atc-t,var(--wpst-atc,var(--wpst-c)))}.wpst .wpst-step__aside-text{font-size:var(--wpst-axs-t,var(--wpst-axs,calc(var(--text)*.92)));font-weight:var(--wpst-axw-t,var(--wpst-axw,400));color:var(--wpst-axc-t,var(--wpst-axc,#6b7280))}}
+@media (max-width:767px){.wpst .wpst-step__aside-title{font-size:var(--wpst-ats-m,var(--wpst-ats-t,var(--wpst-ats,calc(var(--title)*.95))));font-weight:var(--wpst-atw-m,var(--wpst-atw-t,var(--wpst-atw,600)));color:var(--wpst-atc-m,var(--wpst-atc-t,var(--wpst-atc,var(--wpst-c))))}.wpst .wpst-step__aside-text{font-size:var(--wpst-axs-m,var(--wpst-axs-t,var(--wpst-axs,calc(var(--text)*.92))));font-weight:var(--wpst-axw-m,var(--wpst-axw-t,var(--wpst-axw,400)));color:var(--wpst-axc-m,var(--wpst-axc-t,var(--wpst-axc,#6b7280)))}}
 .wpst .wpst-step__aside-text>*{margin:0 0 .5em}.wpst .wpst-step__aside-text>:last-child{margin-bottom:0}.wpst .wpst-step__aside-text a{color:inherit;text-decoration:underline}
 
 /* Cards: filled in the step's color, white text (Soft and Outline removed 2026-11-24, user's requests; a Border instead). */
 .wpst .wpst-step__card{position:relative;z-index:1;display:flex;align-items:center;gap:calc(var(--icon)*.2 + 10px);min-width:0;padding:20px 28px;border-radius:0}
-.wpst--card-filled .wpst-step__card{--title-c:var(--wpst-title-color,#fff);--text-c:var(--wpst-text-color,rgba(255,255,255,.9));--label-c:var(--wpst-label-color,rgba(255,255,255,.85));background:var(--wpst-c)}
+.wpst--card-filled .wpst-step__card{--title-c:#fff;--text-c:rgba(255,255,255,.9);--label-c:var(--wpst-label-color,rgba(255,255,255,.85));background:var(--wpst-c)}
 /* The cards' Border (2026-11-24, Layout → Cards → Border, per screen); its color else the step's. */
 .wpst.wpst--border .wpst-step__card{border:0 var(--wpst-cbs,solid) var(--wpst-cbc,var(--wpst-c));border-width:var(--wpst-cbw)}
 @media (max-width:1024px){.wpst.wpst--border .wpst-step__card{border-width:var(--wpst-cbw-t)}}

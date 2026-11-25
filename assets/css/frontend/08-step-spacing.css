@@ -1,0 +1,32 @@
+/* A step's own Padding / Margin (2026-11-24, its window's Style tab): its card's (Wave: its texts'), per side and screen where it
+   has one; elsewhere the design's own (WP_Steps_Render: a class and a value for each). */
+@media (min-width:1025px){
+.wpst .wpst-step.wpst-step--pt-d .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--pt-d .wpst-step__body.wpst-step__body{padding-top:var(--wpst-pt-d)}
+.wpst .wpst-step.wpst-step--pr-d .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--pr-d .wpst-step__body.wpst-step__body{padding-right:var(--wpst-pr-d)}
+.wpst .wpst-step.wpst-step--pb-d .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--pb-d .wpst-step__body.wpst-step__body{padding-bottom:var(--wpst-pb-d)}
+.wpst .wpst-step.wpst-step--pl-d .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--pl-d .wpst-step__body.wpst-step__body{padding-left:var(--wpst-pl-d)}
+.wpst .wpst-step.wpst-step--mt-d .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--mt-d .wpst-step__body.wpst-step__body{margin-top:var(--wpst-mt-d)}
+.wpst .wpst-step.wpst-step--mr-d .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--mr-d .wpst-step__body.wpst-step__body{margin-right:var(--wpst-mr-d)}
+.wpst .wpst-step.wpst-step--mb-d .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--mb-d .wpst-step__body.wpst-step__body{margin-bottom:var(--wpst-mb-d)}
+.wpst .wpst-step.wpst-step--ml-d .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--ml-d .wpst-step__body.wpst-step__body{margin-left:var(--wpst-ml-d)}
+}
+@media (min-width:768px) and (max-width:1024px){
+.wpst .wpst-step.wpst-step--pt-t .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--pt-t .wpst-step__body.wpst-step__body{padding-top:var(--wpst-pt-t)}
+.wpst .wpst-step.wpst-step--pr-t .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--pr-t .wpst-step__body.wpst-step__body{padding-right:var(--wpst-pr-t)}
+.wpst .wpst-step.wpst-step--pb-t .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--pb-t .wpst-step__body.wpst-step__body{padding-bottom:var(--wpst-pb-t)}
+.wpst .wpst-step.wpst-step--pl-t .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--pl-t .wpst-step__body.wpst-step__body{padding-left:var(--wpst-pl-t)}
+.wpst .wpst-step.wpst-step--mt-t .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--mt-t .wpst-step__body.wpst-step__body{margin-top:var(--wpst-mt-t)}
+.wpst .wpst-step.wpst-step--mr-t .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--mr-t .wpst-step__body.wpst-step__body{margin-right:var(--wpst-mr-t)}
+.wpst .wpst-step.wpst-step--mb-t .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--mb-t .wpst-step__body.wpst-step__body{margin-bottom:var(--wpst-mb-t)}
+.wpst .wpst-step.wpst-step--ml-t .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--ml-t .wpst-step__body.wpst-step__body{margin-left:var(--wpst-ml-t)}
+}
+@media (max-width:767px){
+.wpst .wpst-step.wpst-step--pt-m .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--pt-m .wpst-step__body.wpst-step__body{padding-top:var(--wpst-pt-m)}
+.wpst .wpst-step.wpst-step--pr-m .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--pr-m .wpst-step__body.wpst-step__body{padding-right:var(--wpst-pr-m)}
+.wpst .wpst-step.wpst-step--pb-m .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--pb-m .wpst-step__body.wpst-step__body{padding-bottom:var(--wpst-pb-m)}
+.wpst .wpst-step.wpst-step--pl-m .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--pl-m .wpst-step__body.wpst-step__body{padding-left:var(--wpst-pl-m)}
+.wpst .wpst-step.wpst-step--mt-m .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--mt-m .wpst-step__body.wpst-step__body{margin-top:var(--wpst-mt-m)}
+.wpst .wpst-step.wpst-step--mr-m .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--mr-m .wpst-step__body.wpst-step__body{margin-right:var(--wpst-mr-m)}
+.wpst .wpst-step.wpst-step--mb-m .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--mb-m .wpst-step__body.wpst-step__body{margin-bottom:var(--wpst-mb-m)}
+.wpst .wpst-step.wpst-step--ml-m .wpst-step__card.wpst-step__card,.wpst.wpst--wave .wpst-step.wpst-step--ml-m .wpst-step__body.wpst-step__body{margin-left:var(--wpst-ml-m)}
+}

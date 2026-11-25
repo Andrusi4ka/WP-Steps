@@ -1,0 +1,27 @@
+/* The box (2026-11-25): Margin, Border (Radius at its corners), Padding, the content; a 7 × 7 grid as wide as the card. */
+.wpst-box{position:relative;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-template-rows:repeat(7,34px);gap:5px;margin:6px 0 4px;padding:8px}
+.wpst-box__ring{position:relative;box-sizing:border-box;border:0 solid transparent;border-radius:4px}
+.wpst-box__ring--margin{grid-area:1/1/8/8;margin:-8px;border-color:rgba(249,204,157,.95);background:#f6f7f7;box-shadow:inset 0 0 0 1px #dcdcde}
+.wpst-box__ring--border{grid-area:2/2/7/7;margin:-4px;background:#fff8e5;box-shadow:inset 0 0 0 1px #dcdcde}
+.wpst-box__ring--padding{grid-area:3/3/6/6;margin:-2px;border-color:rgba(147,196,125,.75);background:#ececed;box-shadow:inset 0 0 0 1px #dcdcde}
+.wpst-box__core{grid-area:4/4;border-radius:2px;background:#fff;box-shadow:inset 0 0 0 1px #dcdcde}
+.wpst-box__name{z-index:1;align-self:start;justify-self:start;padding:2px 0 0 2px;color:#8c8f94;font-size:10px;font-weight:600;line-height:1.2;letter-spacing:.04em;text-transform:uppercase;pointer-events:none}
+.wpst-box__name--margin{grid-area:1/1/2/3}.wpst-box__name--border{grid-area:2/3/3/4}.wpst-box__name--padding{grid-area:3/3/4/4}
+/* 10% narrower than their cells, centred in them (2026-11-25, user's request). */
+.wpst-box .wpst-radius-input{position:relative;z-index:1;width:90%;min-width:0;height:34px;justify-self:center}
+.wpst-box .wpst-unit-pick{flex-basis:22px}
+.wpst-box__px{display:flex;align-items:center;padding:0 4px;border-left:1px solid #dcdcde;background:#f6f7f7;color:#646970;font-size:10px}
+.wpst-box__in--margin-top{grid-area:1/4}.wpst-box__in--margin-bottom{grid-area:7/4}.wpst-box__in--margin-left{grid-area:4/1}.wpst-box__in--margin-right{grid-area:4/7}.wpst-box__in--border-top{grid-area:2/4}.wpst-box__in--border-bottom{grid-area:6/4}.wpst-box__in--border-left{grid-area:4/2}.wpst-box__in--border-right{grid-area:4/6}.wpst-box__in--padding-top{grid-area:3/4}.wpst-box__in--padding-bottom{grid-area:5/4}.wpst-box__in--padding-left{grid-area:4/3}.wpst-box__in--padding-right{grid-area:4/5}.wpst-box__in--radius-tl{grid-area:2/2}.wpst-box__in--radius-tr{grid-area:2/6}.wpst-box__in--radius-br{grid-area:6/6}.wpst-box__in--radius-bl{grid-area:6/2}
+.wpst-box__links{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 12px}
+.wpst-box__link{display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 10px;border:1px solid #dcdcde;border-radius:14px;background:#fff;color:#646970;font-size:12px;cursor:pointer}
+.wpst-box__link svg{width:12px;height:12px}
+.wpst-box__link:hover{border-color:var(--wpst-accent);color:var(--wpst-accent)}
+.wpst-box__link[aria-pressed=true]{border-color:var(--wpst-accent);background:#f0f6fc;color:var(--wpst-accent)}
+.wpst-row2.wpst-row2--line{grid-template-columns:minmax(0,1fr) auto;align-items:start;margin-bottom:16px}
+#wpst-app .wpst-row2--line select{width:100%;max-width:none}
+/* Placeholders (an inherited value: the larger screen's, the cards') lighter than a value typed (2026-11-25: they looked typed). */
+#wpst-app .wpst-box input::placeholder,#wpst-app .wpst-spacing input::placeholder,#wpst-app .wpst-number input::placeholder{color:#c3c4c7;opacity:1}
+/* A color and a switch side by side (Line: Color | Arrows, 2026-11-25): the switch level with the swatch. */
+.wpst-row2.wpst-row2--color-toggle{grid-template-columns:auto minmax(0,1fr);align-items:end;column-gap:24px}
+.wpst-row2--color-toggle>.wpst-field--toggle{margin:0 0 10px}
+.wpst-row2.wpst-row2--top{align-items:start}

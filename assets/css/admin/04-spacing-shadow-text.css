@@ -1,0 +1,58 @@
+/* Padding / Margin (2026-11-24, Settings → Custom): WP Banner's box, Margin's ring around Padding's in a 5 × 5 grid. */
+.wpst-spacing{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,68px));grid-template-rows:repeat(5,34px);gap:6px;justify-content:center;margin:6px 0 2px;padding:8px}
+.wpst-spacing__ring{position:relative;box-sizing:border-box;border-style:solid;border-width:0;border-radius:3px}
+.wpst-spacing__ring--margin{grid-area:1/1/6/6;margin:-8px;border-color:rgba(249,204,157,.95);background:#f6f7f7;box-shadow:inset 0 0 0 1px #dcdcde}
+.wpst-spacing__ring--padding{grid-area:2/2/5/5;margin:-3px;border-color:rgba(147,196,125,.75);background:#ececed;box-shadow:inset 0 0 0 1px #dcdcde}
+.wpst-spacing__core{grid-area:3/3;border-radius:2px;background:#fff}
+.wpst-spacing__name{z-index:1;align-self:start;justify-self:start;padding:2px 0 0 2px;color:#8c8f94;font-size:10px;font-weight:600;line-height:1.2;letter-spacing:.04em;text-transform:uppercase;pointer-events:none}
+.wpst-spacing__name--margin{grid-area:1/1}
+.wpst-spacing__name--padding{grid-area:2/2/3/3}
+.wpst-spacing .wpst-radius-input{position:relative;z-index:1;width:auto;height:34px}
+.wpst-spacing .wpst-unit-pick{flex-basis:24px}
+.wpst-spacing__side--margin-top{grid-area:1/3/2/4}.wpst-spacing__side--padding-top{grid-area:2/3/3/4}.wpst-spacing__side--padding-bottom{grid-area:4/3/5/4}.wpst-spacing__side--margin-bottom{grid-area:5/3/6/4}
+.wpst-spacing__side--margin-left{grid-area:3/1}.wpst-spacing__side--padding-left{grid-area:3/2}.wpst-spacing__side--padding-right{grid-area:3/4}.wpst-spacing__side--margin-right{grid-area:3/5}
+.wpst-spacing__link{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;width:28px;height:28px;padding:0;border:1px solid #dcdcde;border-radius:50%;background:#fff;color:#646970;align-self:center;justify-self:center;cursor:pointer}
+.wpst-spacing__link svg{display:block;width:14px;height:14px}
+.wpst-spacing__link:hover{border-color:var(--wpst-accent);color:var(--wpst-accent)}
+.wpst-spacing__link[aria-pressed=true]{border-color:var(--wpst-accent);background:#f0f6fc;color:var(--wpst-accent)}
+.wpst-spacing__link--padding{grid-area:3/3}
+.wpst-spacing__link--margin{grid-area:1/5;justify-self:end;align-self:start}
+.wpst-icon-shadow{margin-top:14px}
+/* A shadow's parts (as WP Swiper's): four numbers in a row, Color under them. */
+.wpst-shadow{margin-top:10px}
+.wpst-row4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) auto;gap:10px;align-items:end}
+.wpst-row4 .wpst-field{min-width:0;margin:0 0 10px}
+.wpst-row4 input[type=number]{width:100%;height:40px;box-sizing:border-box}
+.wpst-shadow .wpst-color__swatch{height:40px}
+@container (max-width:420px){.wpst-row4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.wpst-row4 .wpst-color__swatch{height:40px}
+.wpst-icon-shadow .wpst-field{margin:0}
+.wpst-row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:end}
+/* The same space between any two rows of fields (2026-11-23, user's report: none between Size and Gap). */
+:is(.wpst-row2,.wpst-row3,.wpst-row4)+:is(.wpst-row2,.wpst-row3,.wpst-row4){margin-top:14px}
+.wpst-row2 .wpst-field{min-width:0;margin:0}
+.wpst-row2 .wpst-field .wpst-number input[type=number],.wpst-row2 .wpst-color__swatch{height:40px;min-height:40px;box-sizing:border-box;margin:0}
+.wpst-row2 .wpst-number{display:flex;width:100%}
+.wpst-row2 .wpst-field .wpst-number input[type=number]{flex:1 1 auto;width:auto;min-width:0}
+/* Its Color: a short swatch (64px), no reset (user's choice: there is no usual icon color in the Settings to go back to). */
+/* A step's Text editor (WordPress's), then Font size, Font weight and Color side by side (2026-11-23). */
+.wpst-field--editor .wp-editor-wrap{margin-top:0}
+/* Its label only for screen readers (the tab names it); as WordPress's, also on the tests' page without its styles. */
+.wpst-field--editor>.screen-reader-text{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);border:0}
+/* Font size, a wider Font weight, a short Color (its swatch 64px, no reset: user's choice, 2026-11-23). */
+.wpst-row3{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr) auto;gap:12px;align-items:end}
+.wpst-row3 .wpst-field{min-width:0;margin:0}
+.wpst-row3 select{width:100%}
+/* In the row, its three controls equally tall and as wide as their columns: Font size's number (px after it), Font weight, the
+   color's swatch (its reset icon at its right). */
+.wpst-row3 select,.wpst-row3 .wpst-field .wpst-number input[type=number],.wpst-row3 .wpst-color__swatch{height:40px;min-height:40px;box-sizing:border-box;margin:0}
+.wpst-row3 .wpst-number{display:flex;width:100%}
+.wpst-row3 .wpst-field .wpst-number input[type=number]{flex:1 1 auto;width:auto;min-width:0}
+@container (max-width:420px){.wpst-row3{grid-template-columns:1fr}}
+.wpst-field__row input[type=range]{flex:1 1 auto;min-width:0;margin:0;accent-color:var(--wpst-accent);cursor:pointer}
+.wpst-number{display:inline-flex;align-items:center;gap:4px;flex:0 0 auto;color:#646970}
+.wpst-field .wpst-number input[type=number]{width:72px}
+.wpst-field.is-disabled{opacity:.5}
+.wpst-field.is-disabled *{cursor:not-allowed}
+.wpst-field.is-disabled .wpst-tip{cursor:help}
+

@@ -1,9 +1,10 @@
 {
   "name": "wp-steps-dev",
   "private": true,
-  "description": "Development tools for WP Steps (not part of the plugin zip): PHP checks (tests/settings.php) and browser checks of the designs (tests/browser.cjs, Chrome).",
+  "description": "Development tools for WP Steps (not part of the plugin zip): build (tools/build.cjs joins the parts of admin.js, admin.css and frontend.css), PHP checks (tests/settings.php) and browser checks of the designs (tests/browser.cjs, Chrome).",
   "scripts": {
-    "test": "npm run test:php && npm run test:browser && npm run test:editor",
+    "build": "node tools/build.cjs",
+    "test": "npm run build && npm run test:php && npm run test:browser && npm run test:editor",
     "test:php": "node -e \"require('child_process').execFileSync(process.env.PHP_BIN||'C:/OSPanel/modules/PHP-8.3/php.exe',['tests/settings.php'],{stdio:'inherit'})\"",
     "test:browser": "node tests/browser.cjs",
     "test:editor": "node tests/editor.cjs"

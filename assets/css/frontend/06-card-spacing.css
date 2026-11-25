@@ -1,0 +1,31 @@
+/* The cards' own Padding / Margin (2026-11-25, Style → Cards → the box): per side and screen where set; elsewhere the design's. */
+@media (min-width:1025px){
+.wpst.wpst--cpt-d .wpst-step .wpst-step__card.wpst-step__card{padding-top:var(--wpst-cpt-d)}
+.wpst.wpst--cpr-d .wpst-step .wpst-step__card.wpst-step__card{padding-right:var(--wpst-cpr-d)}
+.wpst.wpst--cpb-d .wpst-step .wpst-step__card.wpst-step__card{padding-bottom:var(--wpst-cpb-d)}
+.wpst.wpst--cpl-d .wpst-step .wpst-step__card.wpst-step__card{padding-left:var(--wpst-cpl-d)}
+.wpst.wpst--cmt-d .wpst-step .wpst-step__card.wpst-step__card{margin-top:var(--wpst-cmt-d)}
+.wpst.wpst--cmr-d .wpst-step .wpst-step__card.wpst-step__card{margin-right:var(--wpst-cmr-d)}
+.wpst.wpst--cmb-d .wpst-step .wpst-step__card.wpst-step__card{margin-bottom:var(--wpst-cmb-d)}
+.wpst.wpst--cml-d .wpst-step .wpst-step__card.wpst-step__card{margin-left:var(--wpst-cml-d)}
+}
+@media (min-width:768px) and (max-width:1024px){
+.wpst.wpst--cpt-t .wpst-step .wpst-step__card.wpst-step__card{padding-top:var(--wpst-cpt-t)}
+.wpst.wpst--cpr-t .wpst-step .wpst-step__card.wpst-step__card{padding-right:var(--wpst-cpr-t)}
+.wpst.wpst--cpb-t .wpst-step .wpst-step__card.wpst-step__card{padding-bottom:var(--wpst-cpb-t)}
+.wpst.wpst--cpl-t .wpst-step .wpst-step__card.wpst-step__card{padding-left:var(--wpst-cpl-t)}
+.wpst.wpst--cmt-t .wpst-step .wpst-step__card.wpst-step__card{margin-top:var(--wpst-cmt-t)}
+.wpst.wpst--cmr-t .wpst-step .wpst-step__card.wpst-step__card{margin-right:var(--wpst-cmr-t)}
+.wpst.wpst--cmb-t .wpst-step .wpst-step__card.wpst-step__card{margin-bottom:var(--wpst-cmb-t)}
+.wpst.wpst--cml-t .wpst-step .wpst-step__card.wpst-step__card{margin-left:var(--wpst-cml-t)}
+}
+@media (max-width:767px){
+.wpst.wpst--cpt-m .wpst-step .wpst-step__card.wpst-step__card{padding-top:var(--wpst-cpt-m)}
+.wpst.wpst--cpr-m .wpst-step .wpst-step__card.wpst-step__card{padding-right:var(--wpst-cpr-m)}
+.wpst.wpst--cpb-m .wpst-step .wpst-step__card.wpst-step__card{padding-bottom:var(--wpst-cpb-m)}
+.wpst.wpst--cpl-m .wpst-step .wpst-step__card.wpst-step__card{padding-left:var(--wpst-cpl-m)}
+.wpst.wpst--cmt-m .wpst-step .wpst-step__card.wpst-step__card{margin-top:var(--wpst-cmt-m)}
+.wpst.wpst--cmr-m .wpst-step .wpst-step__card.wpst-step__card{margin-right:var(--wpst-cmr-m)}
+.wpst.wpst--cmb-m .wpst-step .wpst-step__card.wpst-step__card{margin-bottom:var(--wpst-cmb-m)}
+.wpst.wpst--cml-m .wpst-step .wpst-step__card.wpst-step__card{margin-left:var(--wpst-cml-m)}
+}

@@ -1,4 +1,7 @@
 /*
+ * Built file: assets/js/admin.js is the parts in assets/js/admin/ joined in order by tools/build.cjs
+ * (npm run build; npm test runs it first). Edit the parts, never admin.js. 01 opens the function, 13 closes it.
+ *
  * WP Steps editor (the meta box of WP_Steps_Admin::editor()). One object holds the settings
  * (boot.settings, the same keys as WP_Steps_Settings); every change goes into it and, as JSON,
  * into the hidden #wpst-data that the post form saves (WP_Steps_Admin::save() sanitizes it).
@@ -98,9 +101,6 @@
     function textField(key, label, o) {
         return field(key, label, '<input type="text" id="wpst-f-' + key + '" data-key="' + key + '" value="' + escape(value(key)) + '"' + (o && o.placeholder ? ' placeholder="' + escape(o.placeholder) + '"' : '') + '>', o);
     }
-    function textArea(key, label, o) {
-        return field(key, label, '<textarea id="wpst-f-' + key + '" data-key="' + key + '" rows="3">' + escape(value(key)) + '</textarea>', o);
-    }
     // o.shown: the value shown when the field has none of its own (the one in effect).
     function select(key, label, options, o) {
         const now = o && o.shown !== undefined ? String(o.shown) : String(value(key));
@@ -129,10 +129,13 @@
     }
     // The size on the device being edited; tablet / phone empty: the larger screen's (its placeholder).
     const dkey = (base, d) => d === 'desktop' ? base : base + '_' + d;
-    function eff(base, d) {
-        while (d !== 'desktop' && (data[dkey(base, d)] === null || data[dkey(base, d)] === undefined)) d = UP[d];
-        return data[dkey(base, d)];
+    // A value of t (the Settings' data or a step) on device d: its own there, else the larger screen's; null without any.
+    // (2026-11-25: one walk for every per-device value, was six copies.)
+    function inherit(t, base, d) {
+        for (let dv = d; dv; dv = UP[dv]) { const v = t[dkey(base, dv)]; if (v != null) return v; }
+        return null;
     }
+    const eff = (base, d) => inherit(data, base, d);
     function deviceIcons(base) {
         const own = {desktop: Number(data[base]) !== Number(boot.defaults[base]), tablet: data[base + '_tablet'] != null, mobile: data[base + '_mobile'] != null};
         return '<span class="wpst-devices" role="group" aria-label="Device">' + Object.entries(DEVICES).map(([d, [icon, name]]) =>
@@ -255,12 +258,13 @@
     // Has the step's title or text any words (its tab's dot)?
     const tabFilled = key => key === 'aside' ? !!(plainTitle(current().aside_title) || plainTitle(current().aside_text)) : !!plainTitle(current()[key]);
     // A title as plain words (its tile, the question before deleting it).
-    const plainTitle = html => { const box = document.createElement('div'); box.innerHTML = html || ''; return box.textContent.trim(); };
+    // Its words (2026-11-25: read through DOMParser, which runs nothing: an element's innerHTML would load an <img onerror>).
+    const plainTitle = html => (new DOMParser().parseFromString(String(html || ''), 'text/html').body.textContent || '').trim();
     // Font size, Font weight and Color of the title or the text (title_* / text_*).
     const WEIGHT_LIST = [['', 'Default'], ['300', 'Light 300'], ['400', 'Regular 400'], ['500', 'Medium 500'], ['600', 'Semibold 600'], ['700', 'Bold 700'], ['800', 'Extra bold 800']];
     const WEIGHT_NAMES = Object.fromEntries(WEIGHT_LIST);
     function styleRow(kind) {
-        const fallback = kind === 'title' ? (data.title_color || '#1f2937') : (data.text_color || '#4b5563');
+        const fallback = kind === 'title' ? '#1f2937' : '#4b5563';
         return '<div class="wpst-row3">' + stepSize(kind + '_size', 'Font size')
             + select(kind + '_weight', 'Font weight', WEIGHT_LIST)
             + color(kind + '_color', 'Color', {def:'', reset:false, fallback, tip:'Until one is chosen: white on filled cards, ' + (kind === 'title' ? 'dark' : 'grey') + ' otherwise.'}) + '</div>';
@@ -274,7 +278,7 @@
         const title = k === 'aside_title', usualSize = Math.round(Number(eff(title ? 'title_size' : 'text_size', device)) * (title ? .95 : .92));
         const wUp = device === 'desktop' ? '' : up(k + '_weight');
         const weights = device === 'desktop' ? WEIGHT_LIST : [['', 'As ' + DEVICES[UP[device]][1] + ' (' + (WEIGHT_NAMES[wUp] || 'Default') + ')']].concat(WEIGHT_LIST.filter(([v]) => v));
-        const usualColor = title ? stepColors()[selected] : (data.text_color || '#6b7280');
+        const usualColor = title ? stepColors()[selected] : '#6b7280';
         return '<div class="wpst-row3">' + stepSize(k + '_size', 'Font size', {min:title ? 10 : 10, max:title ? 80 : 40, usual:usualSize, tip:'Empty: the larger screen\'s, else the usual (its placeholder).'})
             + select(dkey(k + '_weight', device), 'Font weight', weights, {shown:step[dkey(k + '_weight', device)] || ''})
             + color(dkey(k + '_color', device), 'Color', {def:'', fallback:(device === 'desktop' ? '' : up(k + '_color')) || usualColor}) + '</div>';
@@ -282,7 +286,8 @@
     // A step's own size on the device edited (Font size under its Text): empty = its larger screen's, then Sizes' (its placeholder).
     function stepInherited(base, d, usual) {
         const step = current();
-        for (let up = UP[d]; up; up = UP[up]) { if (step[dkey(base, up)] != null) return step[dkey(base, up)]; }
+        const up = UP[d] ? inherit(step, base, UP[d]) : null;
+        if (up != null) return up;
         return usual !== undefined ? usual : eff(base === 'icon_size' ? 'icon' : base, d);
     }
     function stepIcons(base) {
@@ -325,11 +330,7 @@
     const CORNERS = ['tl', 'tr', 'br', 'bl'], CORNER_NAMES = {tl:'Top left', tr:'Top right', br:'Bottom right', bl:'Bottom left'}, RADIUS_MAX = {px:200, '%':50};
     const LINK_ICON = '<svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><g fill="currentColor"><path d="M689.24,165.78c39.47-39.47,103.68-39.47,143.15,0,39.47,39.47,39.47,103.68,0,143.15l-285.65,285.65,60.41,60.41,285.65-285.65c72.9-72.9,72.9-191.08,0-263.98h0c-72.9-72.9-191.08-72.9-263.98,0l-99.16,99.16,60.41,60.41,99.16-99.16Z"/><path d="M399.65,741.67l-99.16,99.16c-39.47,39.47-103.68,39.47-143.15,0-39.47-39.47-39.47-103.68,0-143.15l284.33-284.33-60.41-60.41L96.93,637.26c-72.9,72.9-72.9,191.08,0,263.98h0c72.9,72.9,191.08,72.9,263.98,0l99.16-99.16-60.41-60.41Z"/><path d="M157.35,308.93c-39.47-39.47-39.47-103.68,0-143.15,39.47-39.47,103.68-39.47,143.15,0l285.65,285.65,60.41-60.41L360.91,105.37c-72.9-72.9-191.08-72.9-263.98,0h0c-72.9,72.9-72.9,191.08,0,263.98l99.16,99.16,60.41-60.41-99.16-99.16Z"/><path d="M733.24,598.52l99.16,99.16c39.47,39.47,39.47,103.68,0,143.15s-103.68,39.47-143.15,0l-284.33-284.33-60.41,60.41,284.33,284.33c72.9,72.9,191.08,72.9,263.98,0h0c72.9-72.9,72.9-191.08,0-263.98l-99.16-99.16-60.41,60.41Z"/></g></svg>';
     // A corner on a device: its own, else the larger screen's, else null (a circle).
-    function cornerValue(step, c, d) {
-        for (let dv = d; dv; dv = UP[dv]) { const v = step[dkey('icon_radius_' + c, dv)]; if (v != null) return v; }
-        return null;
-    }
-    const cornerCss = (step, c, d) => { const v = cornerValue(step, c, d); return v == null ? (uses('arc') ? '50%' : '0') : v + (step['icon_radius_' + c + '_unit'] || '%'); };
+    const cornerValue = (step, c, d) => inherit(step, 'icon_radius_' + c, d);
     function radiusBox(off) {
         const step = current(), linked = step.icon_radius_linked !== false;
         const corner = c => {
@@ -352,8 +353,8 @@
     const SPACE_MAX = {px:500, '%':50}, SIDES = ['top', 'right', 'bottom', 'left'], SIDE_NAMES = {top:'Top', right:'Right', bottom:'Bottom', left:'Left'};
     const SPACES = {padding:{name:'Padding', attr:'pad'}, margin:{name:'Margin', attr:'margin'}};
     // The Settings' (data: Desktop always a value) or a step's (2026-11-24: none anywhere = the design's own).
-    const spaceVal = (t, key, d) => { for (let dv = d; dv; dv = UP[dv]) { const v = t[dkey(key, dv)]; if (v != null) return v; } return null; };
-    const spaceHint = (t, key) => { const v = t === data ? (device === 'desktop' ? null : spaceVal(t, key, UP[device])) : device === 'desktop' ? null : spaceVal(t, key, UP[device]); return v == null || (t === data && Number(v) === 0) ? '' : v; };
+    const spaceVal = inherit;
+    const spaceHint = (t, key) => { const v = device === 'desktop' ? null : spaceVal(t, key, UP[device]); return v == null || (t === data && Number(v) === 0) ? '' : v; };
     const spaceOwn = (t, dv) => ['padding', 'margin'].some(kind => SIDES.some(s => t === data && dv === 'desktop' ? Number(t[kind + '_' + s]) !== 0 || (t[kind + '_' + s + '_unit'] || 'px') !== 'px' : t[dkey(kind + '_' + s, dv)] != null));
     function spacingField() {
         const t = current();
@@ -400,7 +401,7 @@
     const boxKey = (scope, kind, part) => (scope === 'card' ? 'card_' : '') + kind + '_' + part;
     const boxFixed = (scope, kind) => scope === 'card' && (kind === 'border' || kind === 'radius');
     const boxUnit = (scope, kind, part) => kind === 'border' ? 'px' : (boxTarget(scope)[boxKey(scope, kind, part) + '_unit'] || 'px');
-    function boxVal(scope, kind, part, d) { const t = boxTarget(scope), k = boxKey(scope, kind, part); for (let dv = d; dv; dv = UP[dv]) { const v = t[dkey(k, dv)]; if (v != null) return v; } return null; }
+    const boxVal = (scope, kind, part, d) => inherit(boxTarget(scope), boxKey(scope, kind, part), d);
     // In effect on a device: its own (or its larger screen's), a step's else the cards'; [value, unit].
     function boxEff(scope, kind, part, d) {
         const v = boxVal(scope, kind, part, d);
@@ -497,7 +498,7 @@
             + (image ? '<button type="button" class="wpst-icon-button wpst-icon-button--danger" id="wpst-image-remove" title="Remove image" aria-label="Remove image"><span class="dashicons dashicons-trash" aria-hidden="true"></span></button>' : '') + '</div>';
     }
     function iconCircle(step) {
-        const style = step.icon_style || data.icon_style || 'white', shape = step.icon_shape || (style === 'plain' ? 'none' : 'filled');
+        const style = step.icon_style || 'white', shape = step.icon_shape || (style === 'plain' ? 'none' : 'filled');
         const own = stepColors()[selected], colored = shape === 'filled' && style === 'color';
         // None: the icon in the step's color too, in every design and on any cards (2026-11-24, user's request; frontend.css).
         const bare = own;
@@ -555,7 +556,7 @@
      * The icon's place and alignment per device (2026-11-24): Desktop '' = Auto; tablet / phone null = the larger screen's (the first
      * option says which), 'auto' = Auto there. iconPos(d): the place in effect ('' for Auto).
      */
-    function devValue(base, d) { for (let dv = d; dv; dv = UP[dv]) { const v = data[dkey(base, dv)]; if (v != null) return v; } return ''; }
+    const devValue = (base, d) => { const v = inherit(data, base, d); return v == null ? '' : v; };
     const iconPos = d => { const v = devValue('icon_position', d); return v === 'auto' ? '' : v; };
     function devIcons(own) {
         return '<span class="wpst-devices" role="group" aria-label="Device">' + Object.entries(DEVICES).map(([d, [icon, name]]) =>
@@ -628,6 +629,9 @@
     const STEP_BLOCKS = [['title', 'Title'], ['text', 'Text'], ['icon', 'Icon'], ['color', 'Style'], ['link', 'Link'], ['aside', 'Side text']];
     const stepTabs = () => STEP_BLOCKS.filter(b => b[0] !== 'aside' || uses('aside'));
 
+    // A circle's shadow: its own switch, else the cards' Shadow where the design has cards (2026-11-25; WP_Steps_Render::icon_shadow_on()).
+    const iconShadowOn = step => step.icon_shadow == null ? !!data.shadow && uses('shadow') : !!step.icon_shadow;
+
     const blocks = {
         layout() {
             // Card Icon (2026-11-24, user's request): Icon position and its Alignment side by side (beside the texts Top / Middle / Bottom,
@@ -684,7 +688,7 @@
         title() {
             return card('Title', editorField('title', 'Title') + styleRow('title')
                 // No Default (user's request): a step without a tag of its own shows the one it has (the set's).
-                + select('title_tag', 'Tag', {h1:'H1', h2:'H2', h3:'H3', h4:'H4', h5:'H5', h6:'H6', p:'Paragraph', div:'Div'}, {shown:current().title_tag || String(data.title_tag || 'h3'), tip:'For search engines and screen readers; the look stays the same.'}));
+                + select('title_tag', 'Tag', {h1:'H1', h2:'H2', h3:'H3', h4:'H4', h5:'H5', h6:'H6', p:'Paragraph', div:'Div'}, {shown:current().title_tag || 'h3', tip:'For search engines and screen readers; the look stays the same.'}));
         },
         text() {
             return card('Text', editorField('text', 'Text') + styleRow('text'));
@@ -724,8 +728,8 @@
                 + toggle('icon_use_radius', 'Radius', {disabled:shape === 'none' && !uses('arc'), tip:'On: the corners below (none set: a circle). Off: no rounding, a square.'})
                 + (step.icon_use_radius && (shape !== 'none' || uses('arc')) ? radiusBox(false) : '')
                 // The circle's shadow (2026-11-23): the set's until switched here; only a filled circle has one.
-                + row('wpst-icon-shadow', toggle('icon_shadow', 'Shadow', {checked:step.icon_shadow == null ? !!data.shadow : step.icon_shadow, disabled:shape !== 'filled'})
-                + (shape === 'filled' && (step.icon_shadow == null ? data.shadow : step.icon_shadow) ? shadowFields('icon_shadow') : '')));
+                + row('wpst-icon-shadow', toggle('icon_shadow', 'Shadow', {checked:iconShadowOn(step), disabled:shape !== 'filled'})
+                + (shape === 'filled' && iconShadowOn(step) ? shadowFields('icon_shadow') : '')));
         },
         color() {
             const step = current();
@@ -814,6 +818,9 @@
     function closeStep(apply) {
         if (modal.hidden) return;
         const was = selected;
+        // Closed without Apply after a change (Cancel, ×, Esc): asked first (2026-11-25, user's request); No keeps it open.
+        if (!apply && stepBefore !== null && JSON.stringify(data.steps[was]) !== stepBefore
+            && !window.confirm('Close without applying? The changes to this step will be lost.')) return;
         stopEditor(); closePicker();
         if (!apply && stepBefore !== null && JSON.stringify(data.steps[was]) !== stepBefore) { data.steps[was] = JSON.parse(stepBefore); changed(true); }
         stepBefore = null;

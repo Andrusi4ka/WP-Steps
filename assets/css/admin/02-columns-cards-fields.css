@@ -1,0 +1,27 @@
+/* Menu | block | preview (half). */
+.wpst-workspace{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr) minmax(0,2fr);gap:16px;align-items:start}
+.wpst-menu{display:flex;flex-direction:column;gap:6px;min-width:0}
+.wpst-menu-item{display:flex;align-items:center;gap:10px;width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #dcdcde;border-radius:6px;background:#fff;color:#1d2327;font:inherit;font-weight:600;text-align:left;cursor:pointer}
+.wpst-menu-item .dashicons{flex:0 0 auto;color:#646970}
+.wpst-menu-item__title{flex:1 1 auto;min-width:0}
+.wpst-menu-item::after{content:"\f345";flex:0 0 auto;font:normal 16px/1 dashicons;color:#a7aaad}
+.wpst-menu-item:hover{border-color:var(--wpst-accent);color:var(--wpst-accent)}
+.wpst-menu-item[aria-current=true]{border-color:var(--wpst-accent);background:#f0f6fc;color:var(--wpst-accent);box-shadow:inset 3px 0 0 var(--wpst-accent)}
+.wpst-menu-item[aria-current=true] .dashicons,.wpst-menu-item[aria-current=true]::after{color:var(--wpst-accent)}
+.wpst-settings{min-width:0}
+/* The block chosen, in a frame with its name (as WP Swiper's settings). */
+.wpst-section.wpst-settings-box{margin:0;padding:8px 12px 12px}
+.wpst-settings-box>legend{font-size:14px}
+
+/* Grey cards with an upper-case title. */
+.wpst-card{margin:0 0 10px;padding:12px;border:1px solid #e4e4e4;border-radius:6px;background:#f2f2f2}
+.wpst-subheading{margin:0 0 10px;color:#646970;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+
+/* A field: label row (tips, device icons at the end), the control, a help text. */
+.wpst-field{margin:0 0 14px}
+.wpst-field:last-child{margin-bottom:0}
+.wpst-field__head{display:flex;align-items:center;gap:6px;min-height:26px;margin-bottom:4px}
+.wpst-field__head label{margin:0;font-weight:500}
+.wpst-field input[type=text],.wpst-field textarea,.wpst-field select{width:100%;max-width:100%;box-sizing:border-box}
+.wpst-field .description{margin:4px 0 0}
+.wpst-field__row{display:flex;align-items:center;gap:10px}

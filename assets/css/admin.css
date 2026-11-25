@@ -1,3 +1,4 @@
+/* Built file: assets/css/admin.css is the parts in assets/css/admin/ joined in order (tools/build.cjs, npm run build): edit the parts. */
 /* WP Steps editor: the look of WP Swiper and WP Banner (tiles, menu, grey cards, fields, preview). */
 #wpst-app,#wpst-shortcode{--wpst-accent:#2271b1;--wp-admin-theme-color:#2271b1}
 /* The buttons in WordPress's own blue, at rest, on hover and in focus, whatever the admin color scheme (whose colors.css paints
@@ -22,7 +23,7 @@
 .wpst-tile{position:relative;display:flex;flex-direction:column;gap:6px;min-width:0;margin:0;padding:8px;box-sizing:border-box;border:1px solid #dcdcde;border-radius:6px;background:#fff;color:#1d2327;font:inherit;text-align:left}
 button.wpst-tile{cursor:pointer}
 .wpst-tile:hover{border-color:var(--wpst-accent)}
-.wpst-tile.is-active,.wpst-tile--settings[aria-current=true]{border-color:var(--wpst-accent);background:#f0f6fc;box-shadow:inset 0 0 0 1px var(--wpst-accent)}
+.wpst-tile.is-active{border-color:var(--wpst-accent);background:#f0f6fc;box-shadow:inset 0 0 0 1px var(--wpst-accent)}
 .wpst-tile--step{cursor:grab}
 .wpst-tile--step.is-dragging{opacity:.5}
 .wpst-tile--step.is-drop-before::before,.wpst-tile--step.is-drop-after::before{content:"";position:absolute;top:0;bottom:0;width:3px;border-radius:2px;background:var(--wpst-accent)}
@@ -38,7 +39,7 @@ button.wpst-tile{cursor:pointer}
 .wpst-tile__number{position:absolute;top:4px;left:4px;min-width:20px;height:20px;padding:0 6px;box-sizing:border-box;border-radius:10px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;font-weight:600;line-height:20px;text-align:center}
 .wpst-tile__label{min-width:0;font-weight:600;line-height:1.35;overflow-wrap:anywhere}
 .wpst-tile__label small{display:block;color:#646970;font-weight:400;font-size:11px}
-.wpst-tile:hover .wpst-tile__label,.wpst-tile.is-active .wpst-tile__label,.wpst-tile--settings[aria-current=true] .wpst-tile__label{color:var(--wpst-accent)}
+.wpst-tile:hover .wpst-tile__label,.wpst-tile.is-active .wpst-tile__label{color:var(--wpst-accent)}
 .wpst-tile__tools{position:absolute;top:10px;right:10px;display:flex;gap:2px;opacity:0;transition:opacity .1s}
 .wpst-tile:hover .wpst-tile__tools,.wpst-tile:focus-within .wpst-tile__tools,.wpst-tile.is-active .wpst-tile__tools{opacity:1}
 .wpst-tile__tools .wpst-icon-button{background:rgba(255,255,255,.92)}
@@ -56,7 +57,6 @@ button.wpst-tile{cursor:pointer}
 /* Menu | block | preview (half). */
 .wpst-workspace{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr) minmax(0,2fr);gap:16px;align-items:start}
 .wpst-menu{display:flex;flex-direction:column;gap:6px;min-width:0}
-.wpst-menu__title{margin:0 0 2px;color:#646970;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
 .wpst-menu-item{display:flex;align-items:center;gap:10px;width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #dcdcde;border-radius:6px;background:#fff;color:#1d2327;font:inherit;font-weight:600;text-align:left;cursor:pointer}
 .wpst-menu-item .dashicons{flex:0 0 auto;color:#646970}
 .wpst-menu-item__title{flex:1 1 auto;min-width:0}
@@ -89,10 +89,8 @@ button.wpst-tile{cursor:pointer}
 .wpst-tab:hover{background:#f6f7f7;color:#1d2327}
 .wpst-tab:focus-visible{outline:2px solid var(--wpst-accent);outline-offset:-2px}
 .wpst-tab[aria-selected=true]{border-color:#e4e4e4;background:#f2f2f2;color:#1d2327}
-.wpst-tabs:has(>.wpst-tab:first-child[aria-selected=true])+.wpst-tab-panel{border-top-left-radius:0}
 .wpst-tab__dot{display:none;width:6px;height:6px;border-radius:50%;background:#00a32a}
 .wpst-tab.has-value .wpst-tab__dot{display:block}
-.wpst-tab-panel>.wpst-field[data-field=title_tag]{margin-top:14px}
 /* The step's Icon block: Style, then Size and Color side by side (2026-11-23). */
 /* Icon | Image first (2026-11-23); the image's picker as tall as the icon select: its thumbnail, file name, Choose / Replace, remove. */
 .wpst-media-choice{margin-bottom:10px}
@@ -105,8 +103,6 @@ button.wpst-tile{cursor:pointer}
 .wpst-icon-head{display:flex;gap:8px;align-items:stretch;margin-bottom:14px}
 .wpst-icon-head>.wpst-iconselect{flex:1 1 auto;min-width:0}
 .wpst-icon-head>.wpst-icon-shape{flex:0 0 auto;flex-wrap:nowrap;height:40px;box-sizing:border-box}
-/* Gap, Icon color, Background. */
-.wpst-row3.wpst-row3--icon{grid-template-columns:minmax(0,1fr) auto auto}
 /* Icon color and Background: two short swatches side by side. */
 .wpst-row2.wpst-row2--colors{grid-template-columns:auto auto;justify-content:start;gap:16px}
 /* The circle's Radius box (as WP Banner's): a field at each corner (its number, px / % stacked beside it), the frame rounded as
@@ -228,7 +224,6 @@ button.wpst-tile{cursor:pointer}
 .wpst-color__swatch:hover{border-color:#2c3338}
 .wpst-color__swatch[aria-expanded=true]{border-color:var(--wpst-accent);box-shadow:0 0 0 1px var(--wpst-accent)}
 .wpst-color__chip{display:block;width:100%;height:100%;border-radius:2px;background:repeating-conic-gradient(#dcdcde 0% 25%,#fff 0% 50%) 0 0/10px 10px}
-.wpst-color__auto{color:#646970;font-size:12px}
 /* A step's color: WP Banner's reset icon beside the swatch, greyed while the color is automatic. */
 .wpst-color__reset svg{width:15px;height:15px}
 .pcr-app.wpst-pcr{z-index:100060}
@@ -325,8 +320,6 @@ body.wpst-modal-open .mce-floatpanel,body.wpst-modal-open .mce-menu,body.wpst-mo
 .wpst-image{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .wpst-image img{width:56px;height:56px;object-fit:contain;border:1px solid #dcdcde;border-radius:4px;background:#fff}
 .wpst-image span{min-width:0;overflow-wrap:anywhere;color:#50575e;font-size:12px}
-.wpst-buttons{margin:0}
-.wpst-danger{color:#b32d2e!important}
 
 /* Preview. */
 .wpst-preview{position:sticky;top:46px;min-width:0;padding:12px 16px 16px;border:1px solid #dcdcde;border-radius:4px;background:#f6f7f7}

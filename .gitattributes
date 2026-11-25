@@ -15,3 +15,12 @@
 /tests/**       export-ignore
 /package.json      export-ignore
 /package-lock.json export-ignore
+/tools          export-ignore
+/tools/**       export-ignore
+# The parts of the built files (tools/build.cjs): the plugin loads only the joined files.
+/assets/js/admin           export-ignore
+/assets/js/admin/**        export-ignore
+/assets/css/admin          export-ignore
+/assets/css/admin/**       export-ignore
+/assets/css/frontend       export-ignore
+/assets/css/frontend/**    export-ignore

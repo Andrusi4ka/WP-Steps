@@ -41,6 +41,12 @@ const {chromium} = require('playwright-core');
         const t = await step();
         assert.ok(t.title === 'Our <strong>plan</strong>' && t.title_align === 'center' && t.title_tag === 'h2' && t.title_weight === '800', 'stored: words, alignment, tag, weight (' + JSON.stringify([t.title, t.title_align]) + ')');
         assert.equal((await page.locator('[data-select="0"] .wpst-tile__label').textContent()).trim(), 'Our plan', 'its tile: the words');
+        // Its words are read without running anything in it (2026-11-25: DOMParser; an element's innerHTML loads <img onerror>).
+        const setTitle = html => page.evaluate(content => { const cfg = wpCalls.init[0][1].tinymce, h = []; cfg.setup({on: (e, fn) => h.push(fn), isDirty: () => true, getContent: () => content}); h.forEach(fn => fn()); }, html);
+        await setTitle('<p><img src="x" onerror="window.wpstRan = 1">Safe</p>');
+        await page.waitForTimeout(300);
+        assert.ok((await page.locator('[data-select="0"] .wpst-tile__label').textContent()).trim() === 'Safe' && await page.evaluate(() => window.wpstRan) === undefined, 'a title\'s words read without running its HTML');
+        await setTitle('<p style="text-align: center;">Our <strong>plan</strong></p>');
         await page.click('[data-step-tab="text"]');
         assert.deepEqual((await inits()).slice(1), [['wpst-f-text', 'formatselect,bold,italic,underline,forecolor,alignleft,aligncenter,alignright,bullist,numlist,link,unlink,removeformat,undo,redo', 'strong,em,link,ul,ol,li']], 'Text tab: the Title\'s editor removed, the Text\'s started');
         assert.equal((await page.evaluate(() => wpCalls.remove)).join(), 'wpst-f-title', 'the Title\'s editor removed');
@@ -217,6 +223,15 @@ const {chromium} = require('playwright-core');
         await page.click('[data-step-tab="icon"]');
         const sizeBefore = await page.evaluate(() => JSON.parse(document.getElementById('wpst-data').value).steps[1].icon_size);
         await page.fill('#wpst-f-icon_size', '111');
+        // Closed with a change (2026-11-25): asked first; No keeps the window and the change, Yes puts the step back.
+        let asked = '';
+        page.once('dialog', d => { asked = d.type(); d.dismiss(); });
+        await page.click('#wpst-modal [data-modal-close]');
+        assert.ok(asked === 'confirm' && await page.locator('#wpst-modal').isVisible() && await page.inputValue('#wpst-f-icon_size') === '111', 'Cancel with a change: asked; No keeps it open');
+        page.once('dialog', d => d.dismiss());
+        await page.keyboard.press('Escape');
+        assert.ok(await page.locator('#wpst-modal').isVisible(), 'Esc with a change: asked too');
+        page.once('dialog', d => d.accept());
         await page.click('#wpst-modal [data-modal-close]');
         assert.ok(await page.locator('#wpst-modal').isHidden() && (await page.evaluate(() => JSON.parse(document.getElementById('wpst-data').value).steps[1].icon_size)) === sizeBefore, 'Cancel: the step as it was');
         await openStep(1);await page.click('[data-step-tab="icon"]');await page.fill('#wpst-f-icon_size', '111');await page.click('[data-modal-apply]');

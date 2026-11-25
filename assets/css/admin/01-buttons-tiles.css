@@ -1,0 +1,56 @@
+/* Built file: assets/css/admin.css is the parts in assets/css/admin/ joined in order (tools/build.cjs, npm run build): edit the parts. */
+/* WP Steps editor: the look of WP Swiper and WP Banner (tiles, menu, grey cards, fields, preview). */
+#wpst-app,#wpst-shortcode{--wpst-accent:#2271b1;--wp-admin-theme-color:#2271b1}
+/* The buttons in WordPress's own blue, at rest, on hover and in focus, whatever the admin color scheme (whose colors.css paints
+   .wp-core-ui .button-primary and .button directly): as on the default scheme (2026-11-24, user's report). */
+#wpst-app .button{border-color:#2271b1;background:#f6f7f7;color:#2271b1}
+#wpst-app .button:hover{border-color:#0a4b78;background:#f0f0f1;color:#0a4b78}
+#wpst-app .button:focus{border-color:#3582c4;box-shadow:0 0 0 1px #3582c4;color:#0a4b78;outline:2px solid transparent}
+#wpst-app .button-primary{border-color:#2271b1;background:#2271b1;color:#fff}
+#wpst-app .button-primary:hover,#wpst-app .button-primary:focus{border-color:#135e96;background:#135e96;color:#fff}
+#wpst-app .button-primary:focus{box-shadow:0 0 0 1px #fff,0 0 0 3px #2271b1}
+#wpst-editor .inside{margin:0;padding:12px;container-type:inline-size}
+#wpst-app{color:#1d2327}
+#wpst-app button:focus-visible{outline:2px solid var(--wpst-accent);outline-offset:1px}
+#wpst-app .description{font-size:12px}
+
+.wpst-section{min-width:0;margin:0 0 16px;padding:12px 16px 16px;border:1px solid #dcdcde;border-radius:4px}
+.wpst-section legend{padding:0 6px;font-weight:600}
+.wpst-section>.description{margin:0 0 10px}
+
+/* The tiles: Settings, the steps, Add step. */
+.wpst-strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.wpst-tile{position:relative;display:flex;flex-direction:column;gap:6px;min-width:0;margin:0;padding:8px;box-sizing:border-box;border:1px solid #dcdcde;border-radius:6px;background:#fff;color:#1d2327;font:inherit;text-align:left}
+button.wpst-tile{cursor:pointer}
+.wpst-tile:hover{border-color:var(--wpst-accent)}
+.wpst-tile.is-active{border-color:var(--wpst-accent);background:#f0f6fc;box-shadow:inset 0 0 0 1px var(--wpst-accent)}
+.wpst-tile--step{cursor:grab}
+.wpst-tile--step.is-dragging{opacity:.5}
+.wpst-tile--step.is-drop-before::before,.wpst-tile--step.is-drop-after::before{content:"";position:absolute;top:0;bottom:0;width:3px;border-radius:2px;background:var(--wpst-accent)}
+.wpst-tile--step.is-drop-before::before{left:-7px}
+.wpst-tile--step.is-drop-after::before{right:-7px}
+.wpst-tile__select{display:flex;flex-direction:column;gap:6px;width:100%;min-width:0;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.wpst-tile__thumb{position:relative;display:flex;align-items:center;justify-content:center;width:100%;aspect-ratio:4/3;border-radius:4px;background:#f0f0f1;color:#50575e}
+.wpst-tile__thumb>.dashicons{width:30px;height:30px;font-size:30px}
+.wpst-tile__circle{display:flex;align-items:center;justify-content:center;width:46%;aspect-ratio:1;border-radius:50%;color:#fff;box-shadow:0 4px 10px -4px rgba(0,0,0,.35)}
+.wpst-tile__circle svg{width:52%;height:52%}
+.wpst-tile__circle img{width:56%;height:56%;object-fit:contain}
+.wpst-tile__circle b{font-size:16px}
+.wpst-tile__number{position:absolute;top:4px;left:4px;min-width:20px;height:20px;padding:0 6px;box-sizing:border-box;border-radius:10px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;font-weight:600;line-height:20px;text-align:center}
+.wpst-tile__label{min-width:0;font-weight:600;line-height:1.35;overflow-wrap:anywhere}
+.wpst-tile__label small{display:block;color:#646970;font-weight:400;font-size:11px}
+.wpst-tile:hover .wpst-tile__label,.wpst-tile.is-active .wpst-tile__label{color:var(--wpst-accent)}
+.wpst-tile__tools{position:absolute;top:10px;right:10px;display:flex;gap:2px;opacity:0;transition:opacity .1s}
+.wpst-tile:hover .wpst-tile__tools,.wpst-tile:focus-within .wpst-tile__tools,.wpst-tile.is-active .wpst-tile__tools{opacity:1}
+.wpst-tile__tools .wpst-icon-button{background:rgba(255,255,255,.92)}
+.wpst-add{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:110px;border:1px dashed #a7aaad;border-radius:6px;background:#fff;color:#50575e;font:inherit;font-weight:600;cursor:pointer}
+.wpst-add .dashicons{width:26px;height:26px;font-size:26px}
+.wpst-add:hover{border-color:var(--wpst-accent);color:var(--wpst-accent)}
+.wpst-add:disabled{opacity:.5;cursor:not-allowed}
+
+.wpst-icon-button{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;padding:0;border:0;border-radius:3px;background:none;color:#787c82;cursor:pointer}
+.wpst-icon-button .dashicons{width:18px;height:18px;font-size:18px}
+.wpst-icon-button:hover{background:#f0f0f1;color:var(--wpst-accent)}
+.wpst-icon-button--danger:hover{color:#d63638}
+.wpst-icon-button:disabled{color:#dcdcde;cursor:not-allowed}
+

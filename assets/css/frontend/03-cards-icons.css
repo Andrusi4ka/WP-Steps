@@ -1,0 +1,29 @@
+/* Cards: filled in the step's color, white text (Soft and Outline removed 2026-11-24, user's requests; a Border instead). */
+.wpst .wpst-step__card{position:relative;z-index:1;display:flex;align-items:center;gap:calc(var(--icon)*.2 + 10px);min-width:0;padding:20px 28px;border-radius:0}
+.wpst--card-filled .wpst-step__card{--title-c:#fff;--text-c:rgba(255,255,255,.9);--label-c:var(--wpst-label-color,rgba(255,255,255,.85));background:var(--wpst-c)}
+/* The cards' Border (2026-11-24, Layout → Cards → Border, per screen); its color else the step's. */
+.wpst.wpst--border .wpst-step__card{border:0 var(--wpst-cbs,solid) var(--wpst-cbc,var(--wpst-c));border-width:var(--wpst-cbw)}
+@media (max-width:1024px){.wpst.wpst--border .wpst-step__card{border-width:var(--wpst-cbw-t)}}
+@media (max-width:767px){.wpst.wpst--border .wpst-step__card{border-width:var(--wpst-cbw-m)}}
+/* The cards' corners (2026-11-24, Layout → Cards → Radius, per screen); without it square. */
+.wpst.wpst--radius .wpst-step__card{border-radius:var(--wpst-crr)}
+@media (max-width:1024px){.wpst.wpst--radius .wpst-step__card{border-radius:var(--wpst-crr-t)}}
+@media (max-width:767px){.wpst.wpst--radius .wpst-step__card{border-radius:var(--wpst-crr-m)}}
+.wpst--shadow .wpst-step__card{box-shadow:var(--wpst-csh,0 14px 28px -16px rgba(15,23,42,.45))}
+/* A step's own card shadow (2026-11-25, its Style tab): on (its parts, else the cards') or off. */
+.wpst .wpst-step.wpst-step--csh .wpst-step__card{box-shadow:var(--wpst-csh)}
+.wpst .wpst-step.wpst-step--csh-off .wpst-step__card{box-shadow:none}
+
+/* The icon: in a white circle (the icon in the step's color), in a circle of the step's color (a white icon), or alone. */
+.wpst .wpst-step__icon{position:relative;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:var(--icon);height:var(--icon);border-radius:var(--irad,0);background:#fff;color:var(--wpst-c);line-height:1}
+.wpst .wpst-step__icon svg{display:block;width:calc(var(--isf,.44)*100%);height:calc(var(--isf,.44)*100%)}
+.wpst .wpst-step__icon img{display:block;width:calc(var(--isf,.52)*100%);height:calc(var(--isf,.52)*100%);object-fit:contain}
+.wpst-step--icon-color .wpst-step__icon{background:var(--wpst-c);color:#fff}
+/* A circle's shadow: the step's (Icon → Shadow, 2026-11-23; else the set's Shadow), only under a filled one. */
+.wpst-step--icon-shadow.wpst-step--icon-white .wpst-step__icon,.wpst-step--icon-shadow.wpst-step--icon-color .wpst-step__icon{box-shadow:var(--wpst-ish,0 8px 18px -8px rgba(15,23,42,.5))}
+/* (The light ring inside a color icon on filled cards was removed 2026-11-25, user's request: icons without a border by default.) */
+/* None: the icon in the step's color, as with Filled and Outline, whatever the cards (2026-11-24, user's request); its own Icon color wins. */
+.wpst-step--icon-plain .wpst-step__icon{width:calc(var(--icon)*var(--isf,.5));height:calc(var(--icon)*var(--isf,.5));border-radius:0;background:none;color:var(--wpst-c)}
+.wpst-step--icon-plain .wpst-step__icon svg,.wpst-step--icon-plain .wpst-step__icon img{width:100%;height:100%}
+.wpst .wpst-step__icon--number{font-size:calc(var(--icon)*.3);font-weight:700}
+
